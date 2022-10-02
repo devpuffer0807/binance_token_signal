@@ -1,0 +1,71 @@
+.loading {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999999;
+    background-color: #2c2c2ce6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading span{
+    color: #fff;
+    font-size: 28px;
+}
+
+.login-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-panel > form {
+    padding: 24px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #00000066;
+}
+
+form .form-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+form .form-group:last-child {
+    margin-bottom: 0px;
+}
+
+form .form-group label {
+    margin-right: 12px;
+}
+
+form .form-group input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+form .form-group button{
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 5px;
+}
+
+form .form-group button:hover {
+    opacity: 0.8;
+}
+
