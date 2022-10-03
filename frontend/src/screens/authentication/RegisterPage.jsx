@@ -6,7 +6,6 @@ import {
   Form,
   Button,
   Spinner,
-  Image,
 } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
@@ -134,7 +133,7 @@ export default function RegisterPage() {
                   as={Col}
                   md="6"
                   sm="12"
-                  controlId="validationCustom01"
+                  controlId="validationCustom0"
                 >
                   <Form.Control
                     required
@@ -151,7 +150,7 @@ export default function RegisterPage() {
                   as={Col}
                   md="6"
                   sm="12"
-                  controlId="validationCustom01"
+                  controlId="validationCustom1"
                 >
                   <Form.Control
                     required
@@ -166,7 +165,7 @@ export default function RegisterPage() {
                 </Form.Group>
               </Row>
               <Row className="mt-4">
-                <Form.Group as={Col} md="12" controlId="validationCustom01">
+                <Form.Group as={Col} md="12" controlId="validationCustom2">
                   {userEmailVal === false ? (
                     <Form.Control
                       required
@@ -193,7 +192,7 @@ export default function RegisterPage() {
                 </Form.Group>
               </Row>
               <Row className="mt-4">
-                <Form.Group controlId="validationCustom01">
+                <Form.Group controlId="validationCustom3">
                   <Form.Control
                     required
                     type="password"

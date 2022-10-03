@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react";
 import { Container, Row, Button, Col, Card, Modal, Form } from "react-bootstrap";
 import { useAuth } from "../config/AuthProvider";
-import { FaPlus, FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { SERVER_URL } from "../config";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { MultiSelect } from "react-multi-select-component";
 import Avatar from 'react-avatar';
 
@@ -72,15 +72,6 @@ export default function HomePage() {
     }, 2000);
   });
  }, [])
-
-  const createTeam = (type) => {
-    const Type = {
-      TEAM : {title: "Create Team"},
-      GROUP : {title: "Create Group"}
-    }
-    setModalTitle(Type[type].title);
-    setShow(true);
-  }
 
   if(!user) {
     return <Navigate to="/login"/>;
@@ -196,7 +187,7 @@ export default function HomePage() {
         </Modal.Header>
         <Modal.Body>
         <Row className="mt-4">
-              <Form.Group as={Col} md="12" controlId="validationCustom01">
+              <Form.Group as={Col} md="12" controlId="validationCustom0">
                     <Form.Control
                       required
                       type="text"
@@ -205,7 +196,7 @@ export default function HomePage() {
                       className="py-3"
                     />
                 </Form.Group>
-                <Form.Group as={Col} md="12" controlId="validationCustom01">
+                <Form.Group as={Col} md="12" controlId="validationCustom1">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
                       required

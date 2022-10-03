@@ -6,7 +6,6 @@ import {
   Form,
   Button,
   Spinner,
-  Image,
 } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
@@ -43,10 +42,6 @@ export default function LoginPage() {
       setIsLoding(false);
       toast.error("Please input all informations.");
       return;
-    } else {
-      setTimeout(() => {
-        setIsLoding(false);
-      }, 2000);
     }
 
     const data = {
@@ -58,24 +53,17 @@ export default function LoginPage() {
       .post(SERVER_URL + "/auth/login", data)
       .then((res) => {
         if (res.data.status === true) {
-          setTimeout(() => {
-            setIsLoding(false);
-            auth.login(res.data.data);
-            toast.success(res.data.message);
-          }, 1000);
+          setIsLoding(false);
+          auth.login(res.data.data);
+          toast.success(res.data.message);
         } else {
+          setIsLoding(false);
           toast.error(res.data.message);
-          setTimeout(() => {
-            setIsLoding(false);
-            toast.error(res.data.message);
-          }, 2000);
         }
       })
       .catch((err) => {
-        setTimeout(() => {
-          setIsLoding(false);
-          toast.error("Please check your login information!");
-        }, 2000);
+        setIsLoding(false);
+        toast.error("Please check your login information!");
       });
   };
 
@@ -113,7 +101,7 @@ export default function LoginPage() {
                   as={Col}
                   md="6"
                   sm="12"
-                  controlId="validationCustom01"
+                  controlId="validationCustom0"
                 >
                   {userEmailVal === false ? (
                     <Form.Control
@@ -143,7 +131,7 @@ export default function LoginPage() {
                   as={Col}
                   md="6"
                   sm="12"
-                  controlId="validationCustom01"
+                  controlId="validationCustom1"
                 >
                   {userPasswordVal === false ? (
                     <Form.Control

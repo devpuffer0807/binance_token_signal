@@ -122,7 +122,7 @@ export default function ProfilePage() {
             )}
           </Row>
           <Row>
-            <Form.Group as={Col} md="4" sm="12" controlId="validationCustom01">
+            <Form.Group as={Col} md="4" sm="12" controlId="validationCustom0">
               <Form.Control
                 required
                 type="text"
@@ -134,7 +134,7 @@ export default function ProfilePage() {
                 }}
               />
             </Form.Group>
-            <Form.Group as={Col} md="4" sm="12" controlId="validationCustom01">
+            <Form.Group as={Col} md="4" sm="12" controlId="validationCustom1">
               <Form.Control
                 required
                 type="text"
@@ -146,7 +146,7 @@ export default function ProfilePage() {
                 }}
               />
             </Form.Group>
-            <Form.Group as={Col} md="4" sm="12" controlId="validationCustom01">
+            <Form.Group as={Col} md="4" sm="12" controlId="validationCustom2">
               <Form.Control
                 required
                 type="text"
