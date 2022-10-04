@@ -14,7 +14,6 @@ module.exports = {
                 userPassword: md5(req.body.userPassword),
                 photo: req.body.photo,
             }
-            console.log(update)
     
             await user.updateOne(update);
 

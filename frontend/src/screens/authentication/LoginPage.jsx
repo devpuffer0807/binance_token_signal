@@ -193,13 +193,12 @@ export default function LoginPage() {
               <div className="fs-6 text-center text-white mt-5">
                 By signing in or creating an account, you agree with your{" "}
                 <div className="d-flex align-items-center justify-content-center">
-                  <Link to="/" className="nav-link text-white fw-bold px-2">
-                    Terms & Conditions
-                  </Link>{" "}
-                  and{" "}
-                  <Link to="/" className="nav-link text-white fw-bold px-2">
-                    Privacy Statement
+                  <Link to="/forgot" className="nav-link text-white fw-bold px-2">
+                    Forgot Password
                   </Link>
+                  {/* <Link to="/" className="nav-link text-white fw-bold px-2">
+                    Privacy Statement
+                  </Link> */}
                 </div>
               </div>
             </Form>

@@ -6,9 +6,9 @@ var logger = require('morgan');
 var cors = require('cors');
 var formData = require('express-form-data');
 var os = require('os');
+require('dotenv').config();
 require('./common/db');
 
-// var authRouter = require('./routes/auth');
 var apiRoutes = require('./routes/index');
 
 var app = express();
@@ -34,7 +34,6 @@ app.use(formData.parse({
 
 app.use("/", apiRoutes);
 
-/** ----------------------------------------- */
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -52,7 +51,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 
   console.log(err);
-  console.log(err.details);
 });
 
 module.exports = app;
