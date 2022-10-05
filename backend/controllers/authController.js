@@ -150,43 +150,41 @@ module.exports = {
    * @return { status: true }
    * @return { status: false, message: errorMessage.verificationCodeError }
    * @return { status: false, message: errorMessage.emailError }
-   * @return { status: false, errorCode: errorCode.unexpectedError, message: errorMessage.unexpectedError } 
+   * @return { status: false, errorCode: errorCode.unexpectedError, message: errorMessage.unexpectedError }
    **/
   reset: async (req, res) => {
     try {
       const { email, verifyCode, password } = req.body;
       var user = await User.findOne({
-        where: {
-          email: email,
-        },
+        userEmail: email,
       });
 
-      if(user) {
-        if(user.verifyCode === verifyCode) {
+      if (user) {
+        if (user.verifyCode === verifyCode) {
           user.verifyCode = "";
           user.userPassword = md5(password);
           user.updatedAt = new Date();
           await user.save();
           return res.json({
-            status: true
+            status: true,
           });
         } else {
           return res.json({
             status: false,
-            message: errorMessage.verificationCodeError
+            message: errorMessage.verificationCodeError,
           });
         }
       }
 
       return res.json({
         status: false,
-        message: errorMessage.emailError
+        message: errorMessage.emailError,
       });
-    } catch(e) {
+    } catch (e) {
       return res.json({
         status: false,
         errorCode: errorCode.unexpectedError,
-        message: errorMessage.unexpectedError
+        message: errorMessage.unexpectedError,
       });
     }
   },
