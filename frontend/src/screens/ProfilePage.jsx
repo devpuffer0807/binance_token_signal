@@ -23,11 +23,11 @@ export default function ProfilePage() {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userPhoto, setUserPhoto] = useState("");
-  const [firstNameVal, setFirstNameVal] = useState(true);
-  const [lastNameVal, setLastNameVal] = useState(true);
-  const [nickNameVal, setNicktNameVal] = useState("");
-  const [userEmailVal, setUserEmailVal] = useState(true);
-  const [userPasswordVal, setUserPasswordVal] = useState(true);
+  const [firstNameVal, ] = useState(true);
+  const [lastNameVal, ] = useState(true);
+  const [nickNameVal, ] = useState("");
+  const [userEmailVal, ] = useState(true);
+  const [userPasswordVal, ] = useState(true);
   const [isLoding, setIsLoding] = useState(false);
 
   const { user } = useAuth();
