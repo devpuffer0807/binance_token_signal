@@ -35,6 +35,15 @@ app.use(
   })
 );
 
+app.io = require('socket.io')();
+const socketapi = {
+    io: app.io
+};
+
+require('./common/socketapi')(app.io);
+
+
+
 /**
  * Server Routing configuration
  */
@@ -74,8 +83,11 @@ const client = Binance({
 
 client.ws.futuresAllTickers((tickers) => {
   tickers.map(async (ticker) => {
-    const transaction = new Transaction(ticker);
-    await Transaction.create(transaction);
+    const existTransction = await Transaction.findOne({eventTime: ticker.eventTime, symbol: ticker.symbol});
+    if(!existTransction) {      
+      // const transaction = new Transaction(ticker);
+      await Transaction.create(ticker);
+    }
   });
 });
 

@@ -27,6 +27,7 @@
     "multer": "^1.4.5-lts.1",
     "node-binance-api": "^0.13.1",
     "nodemailer": "^6.8.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "socket.io": "^4.5.2"
   }
 }
