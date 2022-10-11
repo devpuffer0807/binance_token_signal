@@ -23,7 +23,7 @@ const changeCellColor = (cellData) => {
 }
 const renderSignalTimeGridCell = (cellData) => {
   // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-  var date = new Date(cellData.value * 1000);
+  var date = new Date(cellData.value);
   // Hours part from the timestamp
   var hours = date.getHours();
   if(hours < 10) hours = "0" + hours;
@@ -37,7 +37,7 @@ const renderSignalTimeGridCell = (cellData) => {
   var month = date.getMonth() + 1;
   if(month < 10) month = "0" + month;
   // Days part from the timestamp
-  var day = date.getDay();
+  var day = date.getDate();
   if(day < 10) day = "0" + day;
   return (
       day + "/" + month + "-" + hours + ":" + minutes + ":" + seconds
@@ -52,7 +52,6 @@ export default function HomePage() {
     socket = socketIOClient(SERVER_URL);
     socket.on("TransactionData", (arg) => {
       setData(arg);
-      console.log(arg);
       setLoading(false);
     });
   }, []);
