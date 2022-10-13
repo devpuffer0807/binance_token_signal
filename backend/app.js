@@ -10,9 +10,10 @@ var os = require("os");
 require("dotenv").config();
 require("./common/db");
 
-// var Binance = require("node-binance-api");
+
 var Binance = require("binance-api-node").default;
 var Transaction = require("./models/transactions");
+var FutureTransaction = require("./models/futuretransactions");
 
 var apiRoutes = require("./routes/index");
 
@@ -68,27 +69,113 @@ app.use(function (err, req, res, next) {
   console.log(err);
 });
 
-// const binance = new Binance().options({
-//   APIKEY: "AQeP1Fm1Z2wpZOk7H9WM4UvlkmBb4xX8AsN8vElRIMCE8ykPRQ98ki7JmhzJDH9U",
-//   APISECRET: "35V2VjJ33WtgWTjg42p34gjlsXFak6RUWEoLnP1IkOzj1tkvWdyzP7MFrBmy5nnf",
-// });
-
-// binance.futuresMiniTickerStream("BTCUSDT", console.log);
-
 const client = Binance({
   apiKey: "AQeP1Fm1Z2wpZOk7H9WM4UvlkmBb4xX8AsN8vElRIMCE8ykPRQ98ki7JmhzJDH9U",
   apiSecret: "35V2VjJ33WtgWTjg42p34gjlsXFak6RUWEoLnP1IkOzj1tkvWdyzP7MFrBmy5nnf",
   getTime: 60,
 });
 
-client.ws.futuresAllTickers((tickers) => {
-  tickers.map(async (ticker) => {
-    const existTransction = await Transaction.findOne({eventTime: ticker.eventTime, symbol: ticker.symbol});
-    if(!existTransction) {      
-      // const transaction = new Transaction(ticker);
-      await Transaction.create(ticker);
-    }
-  });
+let previousData = [];
+client.ws.allTickers(async (tickers) => {
+    tickers.map(async (ticker) => {
+      let tickerEvent = ticker.eventTime.toString().substring(0, 7);
+      if(!previousData[ticker.symbol]){
+        previousData[ticker.symbol] = { lasttime: tickerEvent };
+        tickerEvent = '^' + tickerEvent;
+        const aggregateVal = [
+          {
+            '$match': {
+              'symbol': ticker.symbol
+            }
+          }, {
+            '$addFields': {
+              'convertedTime': {
+                '$toString': {
+                  '$toLong': '$eventTime'
+                },
+              },        
+            }
+          }, {
+            '$match': {
+              'convertedTime': {
+                '$regex': tickerEvent
+              }
+            }
+          },
+        ];
+        const existTransaction = await Transaction.aggregate(aggregateVal);
+        if(existTransaction.length == 0){
+          await Transaction.create(ticker);
+        }
+      }
+      else {
+        if(previousData[ticker.symbol].lasttime != tickerEvent){
+          previousData[ticker.symbol].lasttime = tickerEvent;
+          await Transaction.create(ticker);
+        }
+      }
+    });
 });
+
+let previousFutureData = [];
+client.ws.futuresAllTickers(async (tickers) => {
+    tickers.map(async (ticker) => {
+      let tickerEvent = ticker.eventTime.toString().substring(0, 7);
+      if(!previousFutureData[ticker.symbol]){
+        previousFutureData[ticker.symbol] = { lasttime: tickerEvent };
+        tickerEvent = '^' + tickerEvent;
+        const aggregateVal = [
+          {
+            '$match': {
+              'symbol': ticker.symbol
+            }
+          }, {
+            '$addFields': {
+              'convertedTime': {
+                '$toString': {
+                  '$toLong': '$eventTime'
+                },
+              },        
+            }
+          }, {
+            '$match': {
+              'convertedTime': {
+                '$regex': tickerEvent
+              }
+            }
+          },
+        ];
+        const existTransaction = await FutureTransaction.aggregate(aggregateVal);
+        if(existTransaction.length == 0){
+          await FutureTransaction.create(ticker);
+        }
+      }
+      else {
+        if(previousFutureData[ticker.symbol].lasttime != tickerEvent){
+          previousFutureData[ticker.symbol].lasttime = tickerEvent;
+          await FutureTransaction.create(ticker);
+        }
+      }
+    });
+});
+// var https = require('https');
+// const url = "https://api.binance.com/api/v3/ticker/24hr";
+// https.get(url, (response) => {
+//   var buffer = "", 
+//       data,
+//       route;
+
+//   response.on("data", function (chunk) {
+//       buffer += chunk;
+//   }); 
+
+//   response.on("end", function (err) {
+//       // finished transferring data
+//       // dump the raw data
+//       console.log("\n");
+//       data = JSON.parse(buffer);
+//       console.log(data);
+//   }); 
+// });
 
 module.exports = app;

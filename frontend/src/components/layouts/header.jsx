@@ -5,7 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import { Image, Dropdown } from "react-bootstrap";
 import { useAuth } from "../../config/AuthProvider";
-import { FaUserAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaUserAlt, FaSignOutAlt, FaMoneyCheckAlt } from "react-icons/fa";
 import Avatar from "react-avatar";
 
 export default function Header() {
@@ -79,6 +79,15 @@ export default function Header() {
                     >
                       <FaUserAlt className="me-2" />
                       Profile
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link
+                      to="/membership"
+                      className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
+                    >
+                      <FaMoneyCheckAlt className="me-2" />
+                      Membership
                     </Link>
                   </Dropdown.Item>
                   <Dropdown.Item

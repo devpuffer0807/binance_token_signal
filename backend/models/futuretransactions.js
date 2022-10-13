@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-const transactionSchema = new mongoose.Schema({
+const futuretransactionSchema = new mongoose.Schema({
   eventType: {
     type: String,
   },
@@ -83,4 +83,4 @@ const transactionSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Transaction", transactionSchema);
+module.exports = mongoose.model("FutureTransaction", futuretransactionSchema);

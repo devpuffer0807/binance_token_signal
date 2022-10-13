@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.1222.0",
+    "binance": "^2.1.2",
     "binance-api-node": "^0.12.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",

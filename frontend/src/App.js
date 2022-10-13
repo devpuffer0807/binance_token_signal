@@ -16,6 +16,7 @@ import HomePage from "./screens/HomePage";
 import RegisterPage from "./screens/authentication/RegisterPage";
 import VerifyPage from "./screens/authentication/VerifyPage";
 import ProfilePage from "./screens/ProfilePage";
+import MembershipPage from "./screens/MembershipPage";
 
 import "./assets/css/main.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -54,6 +55,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/membership"
+                element={
+                  <ProtectedRoute>
+                    <MembershipPage />
                   </ProtectedRoute>
                 }
               />
