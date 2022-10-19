@@ -26,11 +26,11 @@ var server = http.createServer(app);
 /**
  * Socket server initialize
  */
-app.io.attach(server, {
-  cors: {
-    origin: '*',
-  }
-}); 
+// app.io.attach(server, {
+//   cors: {
+//     origin: '*',
+//   }
+// }); 
 // const socketio = require('socket.io');
 // const io = socketio(server, {
 //   cors: {

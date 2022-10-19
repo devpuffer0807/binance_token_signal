@@ -1,0 +1,58 @@
+{
+    "filter": [
+        {
+            "left": "name",
+            "operation": "nempty"
+        },
+        {
+            "left": "typespecs",
+            "operation": "has_none_of",
+            "right": "cryptoasset"
+        }
+    ],
+    "options": {
+        "lang": "en"
+    },
+    "markets": [
+        "crypto"
+    ],
+    "symbols": {
+        "query": {
+            "types": []
+        },
+        "tickers": []
+    },
+    "columns": [
+        "base_currency_logoid",
+        "currency_logoid",
+        "name",
+        "close",
+        "change",
+        "change_abs",
+        "high",
+        "low",
+        "volume",
+        "24h_vol|5",
+        "Recommend.All",
+        "exchange",
+        "description",
+        "type",
+        "subtype",
+        "update_mode",
+        "pricescale",
+        "minmov",
+        "fractional",
+        "minmove2"
+    ],
+    "sort": {
+        "sortBy": "name",
+        "sortOrder": "asc"
+    },
+    "price_conversion": {
+        "to_symbol": false
+    },
+    "range": [
+        0,
+        150
+    ]
+}

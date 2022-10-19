@@ -34,7 +34,7 @@ export default function Menu(props) {
     }
     
     setCursymbol(key);
-    props.socket.emit("changeSymbol", symbolData[key].symbol);
+    
     props.setLoading(true);
     props.setFuturestate(false);
   }  
@@ -43,7 +43,6 @@ export default function Menu(props) {
       return;
     }
     props.setFuturestate(true);
-    props.socket.emit("changeSymbol", futureSymbol[key].symbol);
     props.setLoading(true);
   }  
   return (
@@ -55,56 +54,7 @@ export default function Menu(props) {
           className="justify-content-start"
         >
           <Nav className="d-flex align-items-center">
-            <Dropdown>
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className=" fs-5-2 fw-semibold text-primary-1 secondary-btn"
-              >
-                {/* {symbolData[cursymbol].text} */}
-                Binance Signals
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                {
-                  symbolData.map((symbol, key) => {
-                    return(
-                      <Dropdown.Item
-                        onClick={() => {
-                          handleCurSymbolChange(key);
-                        }}
-                      >
-                        {symbol.text}
-                      </Dropdown.Item>
-                    )
-                  })
-                }
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className=" fs-5-2 fw-semibold text-primary-1 secondary-btn"
-              >
-                {/* {symbolData[cursymbol].text} */}
-                Futures
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                {
-                  futureSymbol.map((symbol, key) => {
-                    return(
-                      <Dropdown.Item
-                        onClick={() => {
-                          handleFutureSymbolChange(key);
-                        }}
-                      >
-                        {symbol.text}
-                      </Dropdown.Item>
-                    )
-                  })
-                }
-              </Dropdown.Menu>
-            </Dropdown>
+            
           </Nav>
         </Navbar.Collapse>
       </Container>

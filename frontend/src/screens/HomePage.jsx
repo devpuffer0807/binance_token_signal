@@ -15,45 +15,29 @@ import DataGrid, {
 import TradingViewWidget, { Themes, IntervalTypes } from 'react-tradingview-widget';
 import Menu from "../components/layouts/menu";
 import Loading from "../components/loading";
-import { SERVER_URL } from "../config";
 import { IoBarChartSharp } from "react-icons/io5";
+import useSound from 'use-sound';
+import mySound from '../assets/Alarm07.wav';
+import TableContainer from "../components/tableContainer";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Table from "react-bootstrap/Table";
+import axios from "axios";
+import Overview from './apiconfig/Overview.json';
+import { SERVER_URL } from '../config/index';
+let payload = Overview;
+const columnInfo = {
+  "name": "NAME",
+  "close": "PRICE",
+  "change": "CHG%",
+  "change_abs": "CHG",
+  "high": "HIGH",
+  "low": "LOW",
+  "volume": "VOL",
+  "24h_vol|5": "VOL 24H IN USD",
+  "recommendall": "TECHNICAL RATING",
+  "exchange": "EXCHANGE",
+};
 
-const changeCellColor = (cellData) => {
-  let value = Math.round(cellData.value * 10000) / 10000;
-  return (
-    value < 0 ? <span style={{color: 'red'}}>{value}</span> : value
-  );
-}
-const lastPriceRound = (cellData) => {
-  let value = +cellData.value;
-  return (
-    value < 0 ? <span style={{color: 'red'}}>{value}</span> : value
-  );
-}
-const renderSignalTimeGridCell = (cellData) => {
-  // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-  // console.log(cellData);
-  var date = new Date(cellData.value);
-  // Hours part from the timestamp
-  var hours = date.getHours();
-  if(hours < 10) hours = "0" + hours;
-  // Minutes part from the timestamp
-  var minutes = date.getMinutes();
-  if(minutes < 10) minutes = "0" + minutes;
-  // Seconds part from the timestamp
-  var seconds = date.getSeconds();
-  if(seconds < 10) seconds = "0" + seconds;
-  // Months part from the timestamp
-  var month = date.getMonth() + 1;
-  if(month < 10) month = "0" + month;
-  // Days part from the timestamp
-  var day = date.getDate();
-  if(day < 10) day = "0" + day;
-  return (
-      day + "/" + month + "-" + hours + ":" + minutes + ":" + seconds
-  );
-}
-let socket;
 export default function HomePage() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -61,120 +45,142 @@ export default function HomePage() {
   const [chartstate, setChartstate] = useState(false);
   const [chartsymbol, setChartsymbol] = useState(false);
   const [futurestate, setFuturestate] = useState(false);
+  const [playSound] = useSound(mySound);
 
-  
+  let req = require('./apiconfig/Overview.json');
+
   useEffect(() => {
-    socket = socketIOClient(SERVER_URL);
-    socket.on("TransactionData", (arg) => {
-      setData(arg);
-      setLoading(false);
-    });
+    let timer = setInterval(() => {
+      axios({
+        method: 'post',
+        url: SERVER_URL + '/scan',
+        data: payload
+      })
+      .then((response) => {
+        const recvData = response.data;
+        if(!recvData.status) {
+          console.error(recvData.message);
+          return;
+        }
+        else {
+          setData(recvData.data);
+        }
+      }).catch((e) => console.error(e));
+    }, 10000);
+    return () => {
+      clearInterval(timer);
+    }
   }, []);
   
   if (!user) {
     return <Navigate to="/login" />;
   }
 
-  const symbolCellRender = (cellData) => {
-    return (
-      <Button 
-        variant="outline-success"
-        style={{width:'100%'}} 
-        onMouseEnter={() => {
-          setChartstate(true);
-          setChartsymbol(cellData.value);
-        }}
-        onMouseLeave={() => {
-          setChartstate(false);
-        }}
-        onClick={() => {
-          if(!futurestate) {
-            window.open('https://www.binance.com/en/trade/' + cellData.value,'_blank');
-          }
-          else{
-            window.open('https://www.binance.com/en/futures/' + cellData.value,'_blank');
-          }
-        }}
-        >{cellData.value}
-      </Button>
-    );
-  }
-  const chartCellRender = (cellData) => {
-    return (
-      <Button
-        variant="primary"
-        onClick={() => {
-          window.open('https://www.tradingview.com/chart/?symbol=BINANCE%3A' + cellData.value);
-        }}
-      >
-        <IoBarChartSharp/>
-      </Button>
-    );
-  }
+  
+  
   
 
   return (
     <div className="HomePage">
       <Loading spinnerShow={loading} message={"loading"} />
-      <Menu socket={socket} setLoading={setLoading} setFuturestate={setFuturestate} futurestate={futurestate} />
-      <Container>
-        <Row className="py-4">
+      <Menu setLoading={setLoading} setFuturestate={setFuturestate} futurestate={futurestate} />
+      {/* <Container> */}
+        {/* <Row className="py-4"> */}
           <DataGrid
-            dataSource={data}
-            keyExpr={'_id'}
-            allowColumnReordering={true}
-            // defaultSelectedRowKeys={selectedKeys}
-          >
-            <GroupPanel visible={true} />
-            <Grouping autoExpandAll={true} />
-            <FilterRow visible={true} />
-            <Selection mode={'single'}/>
-            
-          
-            <Column
-              dataField={'_id'}
-              caption={'ID'}
-              allowSorting={false}
-              allowFiltering={false}
-              allowGrouping={false}
-              allowReordering={false}
-              width={100}
-              visible={false}
-            />
-            <Column 
-              dataField={'eventTime'} 
-              caption={'Signal Time'} 
-              cellRender={renderSignalTimeGridCell}
+              dataSource={data}
+              allowColumnReordering={true}
               
-            />  
-            {/* <Column dataField={'symbol'} caption={'Count'}  />   */}
-            <Column dataField={'symbol'} caption={'Symbol'} cellRender={symbolCellRender}/>  
-            <Column dataField={'curDayClose'} caption={'Last Price'} cellRender={lastPriceRound}/>  
-            <Column dataField={'priceChangePercent'} caption={'Percent'} cellRender={changeCellColor}/> 
-            <Column dataField={'priceChange'} caption={'24h Change'} cellRender={changeCellColor}/>  
-            <Column dataField={'totalTrades'} caption={'Total'} cellRender={changeCellColor}/>  
-            <Column dataField={'symbol'} caption={'TW'} cellRender={chartCellRender}/>  
-
-            <Pager allowedPageSizes={[5, 10, 20]} showPageSizeSelector={true} />
-            <Paging defaultPageSize={10} />
-          </DataGrid>
-        </Row>
-      </Container>
+              // defaultSelectedRowKeys={selectedKeys}
+            >
+              <GroupPanel visible={true} />
+              {
+                payload.columns.map((col) => {
+                  if(col == "Recommend.All") {
+                    col = "recommendall";
+                  }
+                  if(columnInfo[col]){
+                    return(
+                      <Column key={col} dataField={col} caption={columnInfo[col]} cellRender={(cellData) => {
+                        let value = cellData.value;
+                        if(col == "close" || col == "change_abs") {
+                          return (
+                            value < 0 ? <span style={{color: 'red'}}>{value.toFixed(10)}</span> : <span style={{color: 'green'}}>{value.toFixed(10)}</span>
+                          ); 
+                        }
+                        if(col == "high" || col == "low") {
+                          return (
+                            value.toFixed(10)
+                          ); 
+                        }
+                        if(col == "volume" || col == "24h_vol|5") {
+                          if(value == null) {
+                            return "-";
+                          }
+                          if(value < 1000) {
+                            value = value * 1000;
+                            return Math.round(value) / 1000;
+                          }
+                          if(value >= 1000 && value < 1000000) {
+                            return Math.round(value) / 1000 + 'K';
+                          }
+                          if(value >= 1000000 && value < 1000000000) {
+                            value = value / 1000;
+                            return (Math.round(value) / 1000) + 'M';
+                          }
+                          if(value >= 1000000000) {
+                            value = value / 1000000;
+                            return Math.round(value) / 1000 + 'B';
+                          }
+                        }
+                        
+                        if(col == "recommendall") {
+                          if(value == null) {
+                            return "-"
+                          }
+                          if((value > -0.1 && value < 0) || (value < 0.1 && value >= 0)) {
+                            return "-Neutral";
+                          } 
+                          if(value <= -0.5) {
+                            return "Strong Sell";
+                          }
+                          if(value >= 0.5) {
+                            return "Strong Buy";
+                          }
+                          if(value < 0.5 && value >= 0.1) {
+                            return "Buy";
+                          }
+                          if(value > -0.5 && value <= -0.1) {
+                            return "Sell";
+                          }
+                        }
+                        return cellData.value;
+                      }}/>  
+                    )
+                  }
+                })
+              }
+              <Grouping autoExpandAll={true} />
+              <FilterRow visible={true} />
+              <Selection mode={'single'} />
+              <Paging defaultPageSize={10000000} />
+            </DataGrid>
+        {/* </Row> */}
+      {/* </Container> */}
       {
         chartstate && (
           <div className="trading-chart">
-          <TradingViewWidget
-            symbol="NASDAQ:AAPL"
-            theme={Themes.DARK}
-            autosize
-            symbol={chartsymbol}
-            interval={IntervalTypes.D}
-            timezone="Europe/Istanbul"
-            style="1"
-            locale="en"
-            interval="5"
-          />
-        </div>
+            <TradingViewWidget
+              symbol="NASDAQ:AAPL"
+              theme={Themes.DARK}
+              autosize
+              symbol={chartsymbol}
+              interval={IntervalTypes.D}
+              timezone="Europe/Istanbul"
+              style="1"
+              locale="en"
+              interval="5"
+            />
+          </div>
       )}
     </div>
   );

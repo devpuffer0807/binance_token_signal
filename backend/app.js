@@ -11,7 +11,8 @@ require("dotenv").config();
 require("./common/db");
 
 
-var Binance = require("binance-api-node").default;
+
+
 var Transaction = require("./models/transactions");
 var FutureTransaction = require("./models/futuretransactions");
 
@@ -36,12 +37,12 @@ app.use(
   })
 );
 
-app.io = require('socket.io')();
-const socketapi = {
-    io: app.io
-};
+// app.io = require('socket.io')();
+// const socketapi = {
+//     io: app.io
+// };
 
-require('./common/socketapi')(app.io);
+// require('./common/socketapi')(app.io);
 
 
 
@@ -69,113 +70,110 @@ app.use(function (err, req, res, next) {
   console.log(err);
 });
 
-const client = Binance({
-  apiKey: "AQeP1Fm1Z2wpZOk7H9WM4UvlkmBb4xX8AsN8vElRIMCE8ykPRQ98ki7JmhzJDH9U",
-  apiSecret: "35V2VjJ33WtgWTjg42p34gjlsXFak6RUWEoLnP1IkOzj1tkvWdyzP7MFrBmy5nnf",
-  getTime: 60,
-});
-
-let previousData = [];
-client.ws.allTickers(async (tickers) => {
-    tickers.map(async (ticker) => {
-      let tickerEvent = ticker.eventTime.toString().substring(0, 7);
-      if(!previousData[ticker.symbol]){
-        previousData[ticker.symbol] = { lasttime: tickerEvent };
-        tickerEvent = '^' + tickerEvent;
-        const aggregateVal = [
-          {
-            '$match': {
-              'symbol': ticker.symbol
-            }
-          }, {
-            '$addFields': {
-              'convertedTime': {
-                '$toString': {
-                  '$toLong': '$eventTime'
-                },
-              },        
-            }
-          }, {
-            '$match': {
-              'convertedTime': {
-                '$regex': tickerEvent
-              }
-            }
-          },
-        ];
-        const existTransaction = await Transaction.aggregate(aggregateVal);
-        if(existTransaction.length == 0){
-          await Transaction.create(ticker);
-        }
-      }
-      else {
-        if(previousData[ticker.symbol].lasttime != tickerEvent){
-          previousData[ticker.symbol].lasttime = tickerEvent;
-          await Transaction.create(ticker);
-        }
-      }
-    });
-});
-
-let previousFutureData = [];
-client.ws.futuresAllTickers(async (tickers) => {
-    tickers.map(async (ticker) => {
-      let tickerEvent = ticker.eventTime.toString().substring(0, 7);
-      if(!previousFutureData[ticker.symbol]){
-        previousFutureData[ticker.symbol] = { lasttime: tickerEvent };
-        tickerEvent = '^' + tickerEvent;
-        const aggregateVal = [
-          {
-            '$match': {
-              'symbol': ticker.symbol
-            }
-          }, {
-            '$addFields': {
-              'convertedTime': {
-                '$toString': {
-                  '$toLong': '$eventTime'
-                },
-              },        
-            }
-          }, {
-            '$match': {
-              'convertedTime': {
-                '$regex': tickerEvent
-              }
-            }
-          },
-        ];
-        const existTransaction = await FutureTransaction.aggregate(aggregateVal);
-        if(existTransaction.length == 0){
-          await FutureTransaction.create(ticker);
-        }
-      }
-      else {
-        if(previousFutureData[ticker.symbol].lasttime != tickerEvent){
-          previousFutureData[ticker.symbol].lasttime = tickerEvent;
-          await FutureTransaction.create(ticker);
-        }
-      }
-    });
-});
-// var https = require('https');
-// const url = "https://api.binance.com/api/v3/ticker/24hr";
-// https.get(url, (response) => {
-//   var buffer = "", 
-//       data,
-//       route;
-
-//   response.on("data", function (chunk) {
-//       buffer += chunk;
-//   }); 
-
-//   response.on("end", function (err) {
-//       // finished transferring data
-//       // dump the raw data
-//       console.log("\n");
-//       data = JSON.parse(buffer);
-//       console.log(data);
-//   }); 
+// var Binance = require("binance-api-node").default;
+// const client = Binance({
+//   apiKey: "AQeP1Fm1Z2wpZOk7H9WM4UvlkmBb4xX8AsN8vElRIMCE8ykPRQ98ki7JmhzJDH9U",
+//   apiSecret: "35V2VjJ33WtgWTjg42p34gjlsXFak6RUWEoLnP1IkOzj1tkvWdyzP7MFrBmy5nnf",
+//   getTime: 60,
 // });
+// let previousData = [];
+// client.ws.allTickers(async (tickers) => {
+//     tickers.map(async (ticker) => {
+//       let tickerEvent = ticker.eventTime.toString().substring(0, 7);
+//       if(!previousData[ticker.symbol]){
+//         previousData[ticker.symbol] = { lasttime: tickerEvent };
+//         tickerEvent = '^' + tickerEvent;
+//         const aggregateVal = [
+//           {
+//             '$match': {
+//               'symbol': ticker.symbol
+//             }
+//           }, {
+//             '$addFields': {
+//               'convertedTime': {
+//                 '$toString': {
+//                   '$toLong': '$eventTime'
+//                 },
+//               },        
+//             }
+//           }, {
+//             '$match': {
+//               'convertedTime': {
+//                 '$regex': tickerEvent
+//               }
+//             }
+//           },
+//         ];
+//         const existTransaction = await Transaction.aggregate(aggregateVal);
+//         if(existTransaction.length == 0){
+//           await Transaction.create(ticker);
+//         }
+//       }
+//       else {
+//         if(previousData[ticker.symbol].lasttime != tickerEvent){
+//           previousData[ticker.symbol].lasttime = tickerEvent;
+//           await Transaction.create(ticker);
+//         }
+//       }
+//     });
+// });
+
+// let previousFutureData = [];
+// client.ws.futuresAllTickers(async (tickers) => {
+//     tickers.map(async (ticker) => {
+//       let tickerEvent = ticker.eventTime.toString().substring(0, 7);
+//       if(!previousFutureData[ticker.symbol]){
+//         previousFutureData[ticker.symbol] = { lasttime: tickerEvent };
+//         tickerEvent = '^' + tickerEvent;
+//         const aggregateVal = [
+//           {
+//             '$match': {
+//               'symbol': ticker.symbol
+//             }
+//           }, {
+//             '$addFields': {
+//               'convertedTime': {
+//                 '$toString': {
+//                   '$toLong': '$eventTime'
+//                 },
+//               },        
+//             }
+//           }, {
+//             '$match': {
+//               'convertedTime': {
+//                 '$regex': tickerEvent
+//               }
+//             }
+//           },
+//         ];
+//         const existTransaction = await FutureTransaction.aggregate(aggregateVal);
+//         if(existTransaction.length == 0){
+//           await FutureTransaction.create(ticker);
+//         }
+//       }
+//       else {
+//         if(previousFutureData[ticker.symbol].lasttime != tickerEvent){
+//           previousFutureData[ticker.symbol].lasttime = tickerEvent;
+//           await FutureTransaction.create(ticker);
+//         }
+//       }
+//     });
+// });
+
+
+// const Binance = require('node-binance-api');
+// const { Console } = require("console");
+// const binance = new Binance().options({
+//   APIKEY: 'AQeP1Fm1Z2wpZOk7H9WM4UvlkmBb4xX8AsN8vElRIMCE8ykPRQ98ki7JmhzJDH9U',
+//   APISECRET: '35V2VjJ33WtgWTjg42p34gjlsXFak6RUWEoLnP1IkOzj1tkvWdyzP7MFrBmy5nnf'
+// });
+// binance.futuresAggTradeStream( 'ETHUSDT', (res) => {
+//   console.log(res.amount)
+// } );
+
+//current prices with symbol
+// binance.futuresPrices().then((res) => console.log(res))
+
+
 
 module.exports = app;

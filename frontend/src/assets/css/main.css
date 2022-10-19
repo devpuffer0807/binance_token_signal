@@ -1,3 +1,6 @@
+td {
+  border: solid 1px !important;
+}
 .overlay {
     position: fixed;
     width: 100%;

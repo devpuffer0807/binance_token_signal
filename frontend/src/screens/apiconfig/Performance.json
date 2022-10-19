@@ -1,0 +1,54 @@
+{
+    "filter": [
+        {
+            "left": "name",
+            "operation": "nempty"
+        },
+        {
+            "left": "typespecs",
+            "operation": "has_none_of",
+            "right": "cryptoasset"
+        }
+    ],
+    "options": {
+        "lang": "en"
+    },
+    "markets": [
+        "crypto"
+    ],
+    "symbols": {
+        "query": {
+            "types": []
+        },
+        "tickers": []
+    },
+    "columns": [
+        "base_currency_logoid",
+        "currency_logoid",
+        "name",
+        "change",
+        "change|1W",
+        "change|1M",
+        "Perf.3M",
+        "Perf.6M",
+        "Perf.YTD",
+        "Perf.Y",
+        "Volatility.D",
+        "description",
+        "type",
+        "subtype",
+        "update_mode",
+        "exchange"
+    ],
+    "sort": {
+        "sortBy": "name",
+        "sortOrder": "asc"
+    },
+    "price_conversion": {
+        "to_symbol": false
+    },
+    "range": [
+        0,
+        150
+    ]
+}

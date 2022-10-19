@@ -1,5 +1,8 @@
 var Transaction = require("../models/transactions");
 var FutureTransaction = require("../models/futuretransactions");
+const request = require('request');
+const overview = require('./apiconfig/Overview.json');
+const apiUrl = 'https://scanner.tradingview.com/crypto/scan';
 
 let symbolName = "USDT";
 let transactions;
@@ -15,29 +18,31 @@ function socketapi(io) {
 
     socket.on("changeSymbol", async (arg) => {
       symbolName = arg;
-      if(symbolName == 'Future'){
-        const tmpTransactions = await FutureTransaction.find({symbol: { $regex: 'USDT$' }}).sort({eventTime: -1});
-        transactions = tmpTransactions;
-      }
-      else{
-        const tmpTransactions = await Transaction.find({symbol: { $regex: symbolName + '$' }}).sort({eventTime: -1});
-        transactions = tmpTransactions;
-      }
-      io.emit("TransactionData", transactions);
+      
     });
   });
 
   setInterval(async () => {
-    if(symbolName == 'Future'){
-      const tmpTransactions = await FutureTransaction.find({symbol: { $regex: 'USDT$' }}).sort({eventTime: -1});
-      transactions = tmpTransactions;
-    }
-    else{
-      const tmpTransactions = await Transaction.find({symbol: { $regex: symbolName + '$' }}).sort({eventTime: -1});
-      transactions = tmpTransactions;
-    }
+    request.post(
+      apiUrl,
+      {json: overview},
+      function (error, response, body){
+        if (!error && response.statusCode == 200) {
+          const obj = body;
+          
+          Object.keys(obj).forEach(function(key) {
+            const data = obj[key];
+            let cnt = 0;
+            Object.keys(data).forEach(function(key1) {
+              cnt ++;
+            });
+            console.log(cnt);
+          });
+        }
+      }
+    )
     io.emit("TransactionData", transactions);
-  }, 20000);
+  }, 10000);
 }
 
 
