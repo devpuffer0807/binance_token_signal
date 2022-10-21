@@ -15,7 +15,6 @@ import axios from "axios";
 import { SERVER_URL } from "../config";
 import "react-image-upload/dist/index.css";
 import { Navigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 
 const MEMBERSHIP_PLAN = 
   {
@@ -79,52 +78,27 @@ const SelectUSDTPage = (props) => {
   return (
     <div className="SelectUSDTPage by-5">
         <div>
-          <div className="mb-3 fs-6 fw-semibold text-primary">Send USDT to Whaler Hunter App Wallet</div>
-          <div className="mb-3 text-primary-1 fs-6 fw-semibold">SELECT USDT</div>
+          <div className="">Send USDT to Whaler Hunter App Wallet</div>
+          <div className="text-danger fs-5 fw-semibold">SELECT USDT</div>
           <Image src="https://whalehuntapp.com/assets/whitdraw.png"/>
         </div>
-        <div className="d-flex justify-content-end">
-          <Button className="bg-primary-1 text-white border border-0 me-3" onClick={() => {props.setPage(0)}}>Previous</Button>
-          <Button className="bg-primary-1 text-white border border-0" onClick={() => {props.setPage(2)}}>Next</Button>
-        </div>
+      <Button onClick={() => {props.setPage(2)}}>Next</Button>
     </div>
   );
 }
 const CopyWalletAddress = (props) => {
   return (
     <div className="CopyWalletAddress">
-      <div>
-          <div className="mb-3 fs-6 fw-semibold text-primary">Submit Your Subscription Fees</div>
-          <div className="mb-3 text-primary-1 fs-6 fw-semibold">SEND ONLY 71.00 USDT !NEITHER MORE NOR LESS!</div>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label><small className="fw-semibold text-primary">Copy This Address</small></Form.Label>
-            <Form.Control type="text" value="TU5hm4GB1s5JcnoxzF5nv4gzpZ4AWopSHn" readOnly/>
-          </Form.Group>
-          <Image src="https://whalehuntapp.com/assets/tron.jpg"/>
-        </div>
-        <div className="d-flex justify-content-end">
-          <Button className="bg-primary-1 text-white border border-0 me-3" onClick={() => {props.setPage(1)}}>Previous</Button>
-          <Button className="bg-primary-1 text-white border border-0" onClick={() => {props.setPage(3)}}>Next</Button>
-        </div>
+      3rd page
+      <Button onClick={() => {props.setPage(3)}}>nesldkfj</Button>
     </div>
   )
 }
 const InputTransferCode = (props) => {
   return (
     <div className="InputTransferCode">
-      <div>
-          <div className="mb-3 fs-6 fw-semibold text-primary">Paste Transfer Code When Transfer Completed</div>
-          <div className="mb-3 fs-6 fw-semibold text-primary">Check Wallet > Deposit & Witdrawal History</div>
-          <Image src="https://whalehuntapp.com/assets/transfercode.png"/>
-          <Form.Group className="my-3" controlId="formBasicEmail">
-            <Form.Label><small className="fw-semibold text-primary">Transfer Code</small></Form.Label>
-            <Form.Control type="text" placeholder="Transfer Code" onChange={(e) => props.setTransfercode(e.target.value)}/>
-          </Form.Group>
-        </div>
-        <div className="d-flex justify-content-end">
-          <Button className="bg-primary-1 text-white border border-0 me-3" onClick={() => {props.setPage(2)}}>Previous</Button>
-          <Button className="bg-primary-1 text-white border border-0" onClick={props.submitHandler}>Submit</Button>
-        </div>
+      4th page
+      <Button onClick={() => {props.setPage(3)}}>next</Button>
     </div>
   )
 }
@@ -132,55 +106,30 @@ export default function MembershipPage() {
   const { user } = useAuth();
   const [page, setPage] = useState(0);
   const [curplan, setCurplan] = useState("");
-  const [transfercode, setTransfercode] = useState("");
+
   if (!user) {
     return <Navigate to="/login" />;
-  }
-  const membershipSubmitHandler = () => {
-    if(transfercode == "") {
-      toast.error("Please input transfercode.");
-      return;
-    }
-    let payload = {
-      plan: curplan,
-      transferCode: transfercode,
-      user: user  
-    };
-    axios({
-      method: 'post',
-      url: SERVER_URL + '/saveproposal',
-      data: payload
-    })
-    .then((response) => {
-      const recvData = response.data;
-      if(!recvData.status) {
-        console.error(recvData.message);
-        return;
-      }
-      else {
-        console.log(recvData);
-      }
-    }).catch((e) => console.error(e));
   }
 
   return (
     <>
-    <ToastContainer />
       {
         page != 0 && (
-          <div className="container py-5">
+          <div className="membership-title container py-5">
             <Card>
               <Card>
                 <Card.Body>
-                  <Card.Title className="mb-3 text-primary fs-6 fw-semibold">
+                  <Card.Title className="mb-3">
                     { MEMBERSHIP_PLAN[curplan].CONTENT }
                   </Card.Title>
-                  <Card.Text className="mb-5 text-warning fs-6 fw-semibold">
+                  <Card.Text className="mb-5">
                     If your request is correct, it will be approved within 12 hours. To learn the TxId code, you can follow the instruction athttps://www.binance.com/en/support/faq/2c325e53daf04442adbaf8f6ba052f71. Incorrect requests will be denied.
                   </Card.Text>
                     {
-                      page == 1 ? <SelectUSDTPage setPage={setPage} planKey={curplan}/> : page == 2 ? <CopyWalletAddress setPage={setPage} />
-                      : <InputTransferCode setPage={setPage} curplan={curplan} transfercode={transfercode} setTransfercode={setTransfercode} submitHandler={membershipSubmitHandler}/>
+                      page == 0 ? (
+                        <MembershipPlanPage setPage={setPage} setCurplan={setCurplan}/>
+                      ) : page == 1 ? <SelectUSDTPage setPage={setPage} planKey={curplan}/> : page == 2 ? <CopyWalletAddress setPage={setPage} />
+                      : <InputTransferCode setPage={setPage} />
                     }
                 </Card.Body>
               </Card>
@@ -188,9 +137,8 @@ export default function MembershipPage() {
           </div>
         )
       }
-      {
-        page == 0 && (<MembershipPlanPage setPage={setPage} setCurplan={setCurplan}/>)
-      }
+      
+      
     </>
   );
 }

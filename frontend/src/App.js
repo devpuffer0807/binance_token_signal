@@ -34,16 +34,6 @@ function App() {
       </div>
     );
   };
-  const AdminLayout = () => {
-    return (
-      <div>
-        <Header />
-        <div>
-          <Outlet />
-        </div>
-      </div>
-    );
-  }
 
   const ProtectedRoute = ({ children }) => {
     const { user } = useAuth();
