@@ -5,13 +5,13 @@ import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import { Image, Dropdown } from "react-bootstrap";
 import { useAuth } from "../../config/AuthProvider";
-import { FaUserAlt, FaSignOutAlt, FaMoneyCheckAlt } from "react-icons/fa";
+import { FaUserAlt, FaSignOutAlt, FaMoneyCheckAlt, FaUserEdit } from "react-icons/fa";
 import Avatar from "react-avatar";
 
 export default function Header() {
   const { user } = useAuth();
   const auth = useAuth();
-
+  
   return (
     <Navbar collapseOnSelect expand="lg" className="py-3">
       <Container className="justify-content-between">
@@ -90,6 +90,20 @@ export default function Header() {
                       Membership
                     </Link>
                   </Dropdown.Item>
+
+                  
+                  {user.role == "ADMIN" && (
+                    <Dropdown.Item>
+                      <Link
+                        to="/admin/usermanage"
+                        className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
+                      >
+                        <FaUserEdit className="me-2" />
+                        User Manage
+                      </Link>
+                    </Dropdown.Item>
+                  )}
+
                   <Dropdown.Item
                     onClick={() => {
                       auth.logout();

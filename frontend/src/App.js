@@ -17,6 +17,7 @@ import RegisterPage from "./screens/authentication/RegisterPage";
 import VerifyPage from "./screens/authentication/VerifyPage";
 import ProfilePage from "./screens/ProfilePage";
 import MembershipPage from "./screens/MembershipPage";
+import UsermanagePage from "./screens/admin/UsermanagePage";
 
 import "./assets/css/main.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -34,6 +35,16 @@ function App() {
       </div>
     );
   };
+  const AdminLayout = () => {
+    return (
+      <div>
+        <Header />
+        <div>
+          <Outlet />
+        </div>
+      </div>
+    );
+  }
 
   const ProtectedRoute = ({ children }) => {
     const { user } = useAuth();
@@ -70,6 +81,9 @@ function App() {
               <Route path="/forgot" element={<ForgotPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/verify" element={<VerifyPage />} />
+            </Route>
+            <Route path="/admin" element={<AdminLayout />}>
+                <Route path="/admin/usermanage" element={<UsermanagePage />} />
             </Route>
           </Routes>
         </AuthProvider>
