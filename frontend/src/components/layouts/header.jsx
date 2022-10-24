@@ -5,7 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import { Image, Dropdown } from "react-bootstrap";
 import { useAuth } from "../../config/AuthProvider";
-import { FaUserAlt, FaSignOutAlt, FaMoneyCheckAlt, FaUserEdit } from "react-icons/fa";
+import { FaUserAlt, FaSignOutAlt, FaMoneyCheckAlt, FaUserEdit, FaRegIdCard } from "react-icons/fa";
 import Avatar from "react-avatar";
 
 export default function Header() {
@@ -93,15 +93,26 @@ export default function Header() {
 
                   
                   {user.role == "ADMIN" && (
-                    <Dropdown.Item>
+                    <div>
+                      <Dropdown.Item>
+                        <Link
+                          to="/admin/usermanage"
+                          className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
+                        >
+                          <FaUserEdit className="me-2" />
+                          User Manage
+                        </Link>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
                       <Link
-                        to="/admin/usermanage"
+                        to="/admin/membershipmanage"
                         className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
                       >
-                        <FaUserEdit className="me-2" />
-                        User Manage
+                        <FaRegIdCard className="me-2" />
+                        Membership Manage
                       </Link>
                     </Dropdown.Item>
+                  </div>
                   )}
 
                   <Dropdown.Item

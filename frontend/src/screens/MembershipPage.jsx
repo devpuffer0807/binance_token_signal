@@ -148,17 +148,17 @@ export default function MembershipPage() {
     };
     axios({
       method: 'post',
-      url: SERVER_URL + '/saveproposal',
+      url: SERVER_URL + '/membership/saveproposal',
       data: payload
     })
     .then((response) => {
       const recvData = response.data;
       if(!recvData.status) {
-        console.error(recvData.message);
+        toast.error(recvData.message);
         return;
       }
       else {
-        console.log(recvData);
+        toast(recvData.message);
       }
     }).catch((e) => console.error(e));
   }

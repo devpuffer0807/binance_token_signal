@@ -29,6 +29,8 @@ router.post("/user/create", userController.createuser);
 router.get("/user/delete/:id", userController.delete);
 
 router.post("/scan",scanController.scan);
-router.post("/saveproposal", membershipController.saveproposal);
+router.post("/membership/saveproposal", membershipController.saveproposal);
+router.get("/membership", membershipController.memberships);
+router.get("/membership/subscription", membershipController.subscription);
 
 module.exports = router;

@@ -18,6 +18,7 @@ import VerifyPage from "./screens/authentication/VerifyPage";
 import ProfilePage from "./screens/ProfilePage";
 import MembershipPage from "./screens/MembershipPage";
 import UsermanagePage from "./screens/admin/UsermanagePage";
+import MembershipmanagePage from "./screens/admin/MembershipmanagePage";
 
 import "./assets/css/main.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -84,6 +85,7 @@ function App() {
             </Route>
             <Route path="/admin" element={<AdminLayout />}>
                 <Route path="/admin/usermanage" element={<UsermanagePage />} />
+                <Route path="/admin/membershipmanage" element={<MembershipmanagePage />} />
             </Route>
           </Routes>
         </AuthProvider>

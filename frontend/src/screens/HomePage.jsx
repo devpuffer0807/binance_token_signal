@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
 import { useAuth } from "../config/AuthProvider";
 import { Navigate } from "react-router-dom";
-import socketIOClient from "socket.io-client";
 import DataGrid, {
   Column,
   FilterRow,
@@ -49,28 +48,28 @@ export default function HomePage() {
 
   let req = require('./apiconfig/Overview.json');
 
-  useEffect(() => {
-    let timer = setInterval(() => {
-      axios({
-        method: 'post',
-        url: SERVER_URL + '/scan',
-        data: payload
-      })
-      .then((response) => {
-        const recvData = response.data;
-        if(!recvData.status) {
-          console.error(recvData.message);
-          return;
-        }
-        else {
-          setData(recvData.data);
-        }
-      }).catch((e) => console.error(e));
-    }, 10000);
-    return () => {
-      clearInterval(timer);
-    }
-  }, []);
+  // useEffect(() => {
+  //   let timer = setInterval(() => {
+  //     axios({
+  //       method: 'post',
+  //       url: SERVER_URL + '/scan',
+  //       data: payload
+  //     })
+  //     .then((response) => {
+  //       const recvData = response.data;
+  //       if(!recvData.status) {
+  //         console.error(recvData.message);
+  //         return;
+  //       }
+  //       else {
+  //         setData(recvData.data);
+  //       }
+  //     }).catch((e) => console.error(e));
+  //   }, 10000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   }
+  // }, []);
   
   if (!user) {
     return <Navigate to="/login" />;

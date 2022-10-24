@@ -14,8 +14,8 @@ const membershipSchema = new mongoose.Schema({
     max: 255,
     min: 3,
   },
-  user: {
-    type: Object
+  userId: {
+    type: mongoose.Types.ObjectId
   },
   createdAt: {
     type: Date,
