@@ -22,6 +22,7 @@ router.post("/auth/login", authValidator.login, authController.login);
 router.post("/auth/forgot", authValidator.forgot, authController.forgot);
 router.post("/auth/reset", authValidator.reset, authController.reset);
 router.post("/profile/update", profileValidator.update, userController.update);
+
 router.get("/user/users", userController.users);
 router.get("/user/:id", userController.getuser);
 router.post("/user/update", userController.updateuser);
@@ -30,7 +31,8 @@ router.get("/user/delete/:id", userController.delete);
 
 router.post("/scan",scanController.scan);
 router.post("/membership/saveproposal", membershipController.saveproposal);
-router.get("/membership", membershipController.memberships);
-router.get("/membership/subscription", membershipController.subscription);
+router.get("/membership/memberships", membershipController.memberships);
+router.get("/membership/proposals", membershipController.proposals);
+router.post("/membership/updateuserplan", membershipController.updateuserplan)
 
 module.exports = router;

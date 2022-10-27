@@ -6,12 +6,44 @@ var md5 = require("md5");
 var errorMessage = require("../locale/en");
 var errorCode = require("../constants/errorCode");
 
+const MEMBERSHIP_PLAN = 
+  {
+    TRYAL: {
+      TITLE: "3 days Subscription",
+      CONTENT: "Tryal subscription",
+      STYLE: "info",
+      PRICE: 0,
+      PERIOD: 5,
+      PERIOD_UNIT: "day"
+    },
+    BASIC:{
+      TITLE: "1 Month Subscription",
+      CONTENT: "Buy 30 Days Subscription Steps 30 Days Subscription Fee: 71.00 USDT",
+      STYLE: "info",
+      PRICE: 71,
+      PERIOD_UNIT: "month"
+    },
+    PLUS:{
+      TITLE: "3 Month Subscription",
+      CONTENT: "Buy 90 Days Subscription Steps 90 Days Subscription Fee: 176.00 USDT",
+      STYLE: "danger",
+      PRICE: 176,
+      PERIOD_UNIT: "month"
+    },
+  };
+Date.prototype.addDays = function(days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+}
 module.exports = {
   register: async (req, res) => {
     const emailExist = await User.findOne({ userEmail: req.body.userEmail });
-    if (emailExist)
+    if (emailExist) {
       return res.json({ status: false, message: "Email already exist!" });
-
+    }
+    
+    var date = new Date();
     const user = new User({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -20,6 +52,8 @@ module.exports = {
       userEmail: req.body.userEmail,
       userPassword: md5(req.body.userPassword),
       role: req.body.role,
+      expireDate: date.addDays(MEMBERSHIP_PLAN.TRYAL.PERIOD),
+      membershipPlan: "TRYAL"
     });
 
     try {

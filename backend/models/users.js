@@ -42,6 +42,17 @@ const userSchema = new mongoose.Schema({
     allowNull: true,
     defaultValue: ""
   },
+  membershipPlan: {
+    type: String,
+    require: true,
+    max: 1024,
+    min: 6,
+    defaultValue: "TRYAL"
+  },
+  expireDate: {
+    type: Date,
+    default: Date.now,
+  },
   role: {
     type: String,
   },

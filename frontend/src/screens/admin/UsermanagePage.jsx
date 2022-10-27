@@ -252,6 +252,10 @@ export default function UsermanagePage() {
                   <Form.Control type="text" placeholder="Enter Last Name" required value={lastName} onChange={(e) => setLastName(e.target.value)}/>
                 </Form.Group>
                 <Form.Group className="mb-3">
+                  <Form.Label>Nick Name</Form.Label>
+                  <Form.Control type="text" placeholder="Enter Nick Name" required value={nickName} onChange={(e) => setNickName(e.target.value)}/>
+                </Form.Group>
+                <Form.Group className="mb-3">
                   <Form.Label>Email address</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" required value={userEmail} onChange={(e) => setUserEmail(e.target.value)}/>
                 </Form.Group>

@@ -29,7 +29,6 @@ module.exports = {
   users: async (req, res) => {
     try {
       const users = await User.find({});
-
       res.json({status: true, message: "true", users: users});
     }
     catch {
@@ -40,11 +39,11 @@ module.exports = {
     try {
       const id = req.params.id;
       if(!id) {
-          res.json({status: false, message: "id validate error"});
+        res.json({status: false, message: "id validate error"});
       }
       const user = await User.findById(id);
       if(!user) {
-          res.json({status: false, message: "Don't find user."});
+        res.json({status: false, message: "Don't find user."});
       }
       res.json({status: true, message: "true", user: user});
     }
@@ -81,14 +80,12 @@ module.exports = {
       if(req.body.userRole.toUpperCase() == "ADMIN") {
         userRole = "ADMIN";
       }
-      const update = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        nickName: req.body.nickName,
-        userEmail: req.body.userEmail,
-        role: userRole,
-      }
-      
+      let update = user;
+      update.firstName = req.body.firstName;
+      update.lastName = req.body.lastName;
+      update.nickName = req.body.nickName;
+      update.userEmail = req.body.userEmail;
+      update.role = req.body.role;
       await user.updateOne(update);
 
       res.json({status: true, message: "Update Successful!"});

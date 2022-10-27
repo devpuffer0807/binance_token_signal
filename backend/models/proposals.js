@@ -1,7 +1,6 @@
 var mongoose = require("mongoose");
-const User = require("./users");
 
-const membershipSchema = new mongoose.Schema({
+const proposalSchema = new mongoose.Schema({
   plan: {
     type: String,
     require: true,
@@ -17,6 +16,11 @@ const membershipSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Types.ObjectId
   },
+  state: {
+    type: Boolean,
+    require: true,
+    default: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -27,4 +31,4 @@ const membershipSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Membership", membershipSchema);
+module.exports = mongoose.model("Proposal", proposalSchema);
