@@ -76,7 +76,7 @@ module.exports = {
       if (emailExist.length > 0) {
         return res.json({ status: false, message: "Email already exist!" });
       }
-      let userRole = "User";
+      let userRole = "USER";
       if(req.body.userRole.toUpperCase() == "ADMIN") {
         userRole = "ADMIN";
       }
@@ -85,7 +85,7 @@ module.exports = {
       update.lastName = req.body.lastName;
       update.nickName = req.body.nickName;
       update.userEmail = req.body.userEmail;
-      update.role = req.body.role;
+      update.role = req.body.userRole;
       await user.updateOne(update);
 
       res.json({status: true, message: "Update Successful!"});
