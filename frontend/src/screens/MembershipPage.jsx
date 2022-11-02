@@ -12,26 +12,12 @@ import {
 import { Link } from "react-router-dom";
 import { useAuth } from "../config/AuthProvider";
 import axios from "axios";
-import { SERVER_URL } from "../config";
+import { SERVER_URL, MEMBERSHIP_PLAN } from "../config";
 import "react-image-upload/dist/index.css";
 import { Navigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-const MEMBERSHIP_PLAN = 
-  {
-    BASIC:{
-      TITLE: "1 Month Subscription",
-      CONTENT: "Buy 30 Days Subscription Steps 30 Days Subscription Fee: 71.00 USDT",
-      STYLE: "info",
-      PRICE: 71 
-    },
-    PLUS:{
-      TITLE: "3 Month Subscription",
-      CONTENT: "Buy 90 Days Subscription Steps 90 Days Subscription Fee: 176.00 USDT",
-      STYLE: "danger",
-      PRICE: 176
-    },
-  };
+
 const MembershipPlanPage = (props) => {
   return (
     <div className="MembershipPlanPage pt-5 mt-5">
@@ -45,6 +31,9 @@ const MembershipPlanPage = (props) => {
         <Row className="mt-5 pt-2">
           {
             Object.keys(MEMBERSHIP_PLAN).map((key) => {
+              if(key == "TRYAL"){
+                return;
+              }
               return (
                 <Col md={6} sm={12}>
                   <Card className="text-center"

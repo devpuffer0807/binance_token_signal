@@ -1,4 +1,4 @@
-
+const User = require("../models/users");
 const request = require('request');
 const apiUrl = 'https://scanner.tradingview.com/crypto/scan';
 

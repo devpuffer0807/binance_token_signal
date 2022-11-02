@@ -23,7 +23,8 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import Overview from './apiconfig/Overview.json';
 import { SERVER_URL } from '../config/index';
-let payload = Overview;
+import { ToastContainer, toast } from "react-toastify";
+
 const columnInfo = {
   "name": "NAME",
   "close": "PRICE",
@@ -45,126 +46,52 @@ export default function HomePage() {
   const [chartsymbol, setChartsymbol] = useState(false);
   const [futurestate, setFuturestate] = useState(false);
   const [playSound] = useSound(mySound);
+  const [signal, setSignal] = useState("GETALL");
 
   let req = require('./apiconfig/Overview.json');
 
-  // useEffect(() => {
-  //   let timer = setInterval(() => {
-  //     axios({
-  //       method: 'post',
-  //       url: SERVER_URL + '/scan',
-  //       data: payload
-  //     })
-  //     .then((response) => {
-  //       const recvData = response.data;
-  //       if(!recvData.status) {
-  //         console.error(recvData.message);
-  //         return;
-  //       }
-  //       else {
-  //         setData(recvData.data);
-  //       }
-  //     }).catch((e) => console.error(e));
-  //   }, 10000);
-  //   return () => {
-  //     clearInterval(timer);
-  //   }
-  // }, []);
+  useEffect(() => {
+    let timer = setInterval(() => {
+      axios({
+        method : 'get',
+        url : SERVER_URL + "/signals/getall",
+      })
+      .then((res) => {
+        const recvData = res.data;
+        if(!recvData.status) {
+          toast.error(recvData.message);
+          return;
+        }
+        setData(recvData.data);
+      })
+      .catch((e) => console.error(e));
+    }, 10000);
+    return () => {
+      clearInterval(timer);
+    }
+  }, [signal]);
   
   if (!user) {
     return <Navigate to="/login" />;
   }
 
-  
-  
-  
-
   return (
     <div className="HomePage">
-      <Loading spinnerShow={loading} message={"loading"} />
-      <Menu setLoading={setLoading} setFuturestate={setFuturestate} futurestate={futurestate} />
-      {/* <Container> */}
-        {/* <Row className="py-4"> */}
+      <ToastContainer />
+      <Menu setSignal={setSignal} signal={signal}/>
+        <Container>
           <DataGrid
               dataSource={data}
               allowColumnReordering={true}
-              
-              // defaultSelectedRowKeys={selectedKeys}
             >
               <GroupPanel visible={true} />
-              {
-                payload.columns.map((col) => {
-                  if(col == "Recommend.All") {
-                    col = "recommendall";
-                  }
-                  if(columnInfo[col]){
-                    return(
-                      <Column key={col} dataField={col} caption={columnInfo[col]} cellRender={(cellData) => {
-                        let value = cellData.value;
-                        if(col == "close" || col == "change_abs") {
-                          return (
-                            value < 0 ? <span style={{color: 'red'}}>{value.toFixed(10)}</span> : <span style={{color: 'green'}}>{value.toFixed(10)}</span>
-                          ); 
-                        }
-                        if(col == "high" || col == "low") {
-                          return (
-                            value.toFixed(10)
-                          ); 
-                        }
-                        if(col == "volume" || col == "24h_vol|5") {
-                          if(value == null) {
-                            return "-";
-                          }
-                          if(value < 1000) {
-                            value = value * 1000;
-                            return Math.round(value) / 1000;
-                          }
-                          if(value >= 1000 && value < 1000000) {
-                            return Math.round(value) / 1000 + 'K';
-                          }
-                          if(value >= 1000000 && value < 1000000000) {
-                            value = value / 1000;
-                            return (Math.round(value) / 1000) + 'M';
-                          }
-                          if(value >= 1000000000) {
-                            value = value / 1000000;
-                            return Math.round(value) / 1000 + 'B';
-                          }
-                        }
-                        
-                        if(col == "recommendall") {
-                          if(value == null) {
-                            return "-"
-                          }
-                          if((value > -0.1 && value < 0) || (value < 0.1 && value >= 0)) {
-                            return "-Neutral";
-                          } 
-                          if(value <= -0.5) {
-                            return "Strong Sell";
-                          }
-                          if(value >= 0.5) {
-                            return "Strong Buy";
-                          }
-                          if(value < 0.5 && value >= 0.1) {
-                            return "Buy";
-                          }
-                          if(value > -0.5 && value <= -0.1) {
-                            return "Sell";
-                          }
-                        }
-                        return cellData.value;
-                      }}/>  
-                    )
-                  }
-                })
-              }
               <Grouping autoExpandAll={true} />
               <FilterRow visible={true} />
               <Selection mode={'single'} />
-              <Paging defaultPageSize={10000000} />
-            </DataGrid>
-        {/* </Row> */}
-      {/* </Container> */}
+              <Pager allowedPageSizes={[5, 10, 20]} showPageSizeSelector={true} />
+              <Paging defaultPageSize={10} />
+          </DataGrid>
+        </Container>
       {
         chartstate && (
           <div className="trading-chart">

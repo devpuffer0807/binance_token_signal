@@ -6,45 +6,14 @@ import { Link } from "react-router-dom";
 import { Image, Dropdown } from "react-bootstrap";
 import { FaUserAlt, FaSignOutAlt } from "react-icons/fa";
 import Avatar from "react-avatar";
-
-const symbolData = [
-  {
-    "symbol": "USDT", "text": "USDT Spot Signal"
-  }, 
-  {
-    "symbol": "BUSD", "text": "BUSD Spot Signal"
-  },
-  {
-    "symbol": "BTC", "text": "BTC Spot Signal"
-  }, 
-];
-const futureSymbol = [
-  {
-    "symbol": "Future", "text": "Binance Futures"
-  }, 
-];
+import { SIGNAL_DATA } from "../../config";
 
 
 export default function Menu(props) {
-  const [cursymbol, setCursymbol] = useState(0);
-  
   const handleCurSymbolChange = (key) => {
-    if(key == cursymbol && props.futurestate == false){
-      return;
-    }
-    
-    setCursymbol(key);
-    
-    props.setLoading(true);
-    props.setFuturestate(false);
-  }  
-  const handleFutureSymbolChange = (key) => {
-    if(props.futurestate == true){
-      return;
-    }
-    props.setFuturestate(true);
-    props.setLoading(true);
-  }  
+    console.log(props.signal)
+    props.setSignal(key);
+  }
   return (
     <Navbar collapseOnSelect expand="lg" className="py-3">
       <Container className="justify-content-between">
@@ -54,7 +23,29 @@ export default function Menu(props) {
           className="justify-content-start"
         >
           <Nav className="d-flex align-items-center">
-            
+            <Dropdown>
+              <Dropdown.Toggle
+                id="dropdown-basic"
+                className=" fs-5-2 fw-semibold text-primary-1 secondary-btn"
+              >
+                {SIGNAL_DATA[props.signal].TITLE}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {
+                  Object.keys(SIGNAL_DATA).map((key) => {
+                    return(
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleCurSymbolChange(key);
+                        }}
+                      >
+                        {SIGNAL_DATA[key].TITLE}
+                      </Dropdown.Item>
+                    )
+                  })
+                }
+              </Dropdown.Menu>
+            </Dropdown>
           </Nav>
         </Navbar.Collapse>
       </Container>

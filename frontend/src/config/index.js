@@ -29,3 +29,41 @@ export const MEMBERSHIP_PLAN =
       PERIOD_UNIT: "month"
     },
   };
+export const SIGNAL_DATA = {
+  GETALL: {
+    TITLE: "All Spot Signals",
+    VALUE: 0
+  },
+  BTC: {
+    TITLE: "BTC Spot Signals",
+    VALUE: 1
+  },
+  USDT: {
+    TITLE: "USDT Spot Signals", 
+    VALUE: 2
+  },
+  BUSDT: {
+    TITLE: "BUSD Spot Signals",
+    VALUE: 3
+  },
+  ALL_USDT: {
+    TITLE: "All Markets Signals",
+    VALUE: 4
+  },
+  KUCOIN_USDT: {
+    TITLE: "Kucoin Signals",
+    VALUE: 5
+  },
+  BITFIX_USDT: {
+    TITLE: "Bitfinex Signals",
+    VALUE: 6
+  },
+  FIX_SIGNAL: {
+    TITLE: "FTX Signals",
+    VALUE: 7
+  },
+  BINANCE_FUTURE: {
+    TITLE: "Binance Futures",
+    VALUE: 8
+  }
+}
