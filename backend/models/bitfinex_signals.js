@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 const bitfinex_signalSchema = new mongoose.Schema({
   signal_time : {
-    type: Date,
+    type: String,
   },
   count : {
     type: Number

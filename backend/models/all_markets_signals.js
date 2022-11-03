@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 const all_markets_signalSchema = new mongoose.Schema({
   signal_time : {
-    type: Date,
+    type: String,
   },
   count : {
     type: Number

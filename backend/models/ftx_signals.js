@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 const ftx_signalSchema = new mongoose.Schema({
   signal_time : {
-    type: Date,
+    type: String,
   },
   count : {
     type: Number

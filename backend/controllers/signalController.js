@@ -43,7 +43,7 @@ module.exports = {
       let sendData = [];
       allSpots.map((signal) => {
         sendData.push({
-          Signal_Time : formatDate(new Date(signal.signal_time.getTime() + 180 * 60000)),
+          Signal_Time : formatDate(new Date(new Date(signal.signal_time).getTime() + 180 * 60000)),
           Count: signal.count,
           Symbol: signal.symbol,
           Last_Price: signal.last_price,
@@ -65,7 +65,7 @@ module.exports = {
       let sendData = [];
       allSpots.map((signal) => {
         sendData.push({
-          Signal_Time : formatDate(new Date(signal.signal_time.getTime() + 180 * 60000)),
+          Signal_Time : formatDate(new Date(new Date(signal.signal_time).getTime() + 180 * 60000)),
           Count: signal.count,
           Symbol: signal.symbol,
           Last_Price: signal.last_price,
@@ -87,7 +87,7 @@ module.exports = {
       let sendData = [];
       allSpots.map((signal) => {
         sendData.push({
-          Signal_Time : formatDate(new Date(signal.signal_time.getTime() + 180 * 60000)),
+          Signal_Time : formatDate(new Date(new Date(signal.signal_time).getTime() + 180 * 60000)),
           Count: signal.count,
           Symbol: signal.symbol,
           Last_Price: signal.last_price,
@@ -109,7 +109,7 @@ module.exports = {
       let sendData = [];
       allSpots.map((signal) => {
         sendData.push({
-          Signal_Time : formatDate(new Date(signal.signal_time.getTime() + 180 * 60000)),
+          Signal_Time : formatDate(new Date(new Date(signal.signal_time).getTime() + 180 * 60000)),
           Count: signal.count,
           Symbol: signal.symbol,
           Last_Price: signal.last_price,
@@ -131,7 +131,7 @@ module.exports = {
       let sendData = [];
       allSpots.map((signal) => {
         sendData.push({
-          Signal_Time : formatDate(new Date(signal.signal_time.getTime() + 180 * 60000)),
+          Signal_Time : formatDate(new Date(new Date(signal.signal_time).getTime() + 180 * 60000)),
           Count: signal.count,
           Symbol: signal.symbol,
           Last_Price: signal.last_price,
@@ -153,7 +153,7 @@ module.exports = {
       let sendData = [];
       allSpots.map((signal) => {
         sendData.push({
-          Signal_Time : formatDate(new Date(signal.signal_time.getTime() + 180 * 60000)),
+          Signal_Time : formatDate(new Date(new Date(signal.signal_time).getTime() + 180 * 60000)),
           Count: signal.count,
           Symbol: signal.symbol,
           Last_Price: signal.last_price,
