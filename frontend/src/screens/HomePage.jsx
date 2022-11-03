@@ -22,22 +22,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Table from "react-bootstrap/Table";
 import axios from "axios";
 import Overview from './apiconfig/Overview.json';
-import { SERVER_URL } from '../config/index';
+import { SERVER_URL,SIGNAL_DATA } from '../config/index';
 import { ToastContainer, toast } from "react-toastify";
 
-const columnInfo = {
-  "name": "NAME",
-  "close": "PRICE",
-  "change": "CHG%",
-  "change_abs": "CHG",
-  "high": "HIGH",
-  "low": "LOW",
-  "volume": "VOL",
-  "24h_vol|5": "VOL 24H IN USD",
-  "recommendall": "TECHNICAL RATING",
-  "exchange": "EXCHANGE",
-};
-
+let signalForRequest = "GETALL";
 export default function HomePage() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -50,31 +38,69 @@ export default function HomePage() {
 
   let req = require('./apiconfig/Overview.json');
 
+  const loadGridData = () => {
+    let link = SERVER_URL;
+    let payload = {};
+    let actionMethod = 'post'
+    switch(SIGNAL_DATA[signalForRequest].VALUE) {
+      case 4:
+        actionMethod = 'get';
+        link = SERVER_URL + '/signal/market';
+        break;
+      case 5:
+        actionMethod = 'get';
+        link = SERVER_URL + '/signal/kucoin';    
+        break;
+      case 6:
+        actionMethod = 'get';
+        link = SERVER_URL + '/signal/bitfinex';
+        break;
+      case 7:
+        actionMethod = 'get';
+        link = SERVER_URL + '/signal/ftx';
+        break;
+      case 8:
+        actionMethod = 'get';
+        link = SERVER_URL + '/signal/future'
+        break;
+      default:
+        actionMethod = 'post';
+        link = SERVER_URL + '/signal/spot';
+        payload = {
+          type: signalForRequest
+        }
+        break;
+    }
+    
+    axios({
+      method : actionMethod,
+      url : link,
+      data : payload
+    })
+    .then((res) => {
+      const recvData = res.data;
+      if(!recvData.status) {
+        toast.error(recvData.message);
+        return;
+      }
+      setData(recvData.data);
+    })
+    .catch((e) => console.error(e));
+  }
   useEffect(() => {
     let timer = setInterval(() => {
-      axios({
-        method : 'get',
-        url : SERVER_URL + "/signals/getall",
-      })
-      .then((res) => {
-        const recvData = res.data;
-        if(!recvData.status) {
-          toast.error(recvData.message);
-          return;
-        }
-        setData(recvData.data);
-      })
-      .catch((e) => console.error(e));
+      loadGridData();
     }, 10000);
     return () => {
       clearInterval(timer);
     }
+  }, []);
+  useEffect(() => {
+    signalForRequest = signal;
   }, [signal]);
-  
   if (!user) {
     return <Navigate to="/login" />;
   }
-
   return (
     <div className="HomePage">
       <ToastContainer />
@@ -88,6 +114,27 @@ export default function HomePage() {
               <Grouping autoExpandAll={true} />
               <FilterRow visible={true} />
               <Selection mode={'single'} />
+              <Column dataField={'Signal_Time'} caption={'Signal Time'}/>  
+              <Column dataField={'Count'} caption={'Count'}/>  
+              <Column dataField={'Symbol'} caption={'Symbol'}/>  
+              <Column dataField={'Last_Price'} caption={'Last Price'}/>  
+              <Column dataField={'Percent'} caption={'Percent'}/>  
+              <Column dataField={'24h_change'} caption={'24h change'}/>  
+              <Column dataField={'Total'} caption={'Total'}/>
+              {
+                SIGNAL_DATA[signal].VALUE == 8 ? (
+                  <Column dataField={'Signal'} caption={'Signal'}/>
+                ) : (
+                  <Column dataField={'Series'} caption={'Series'}/>
+                )
+              }  
+              {
+                SIGNAL_DATA[signal].VALUE == 8 ? (
+                  <Column dataField={'Success'} caption={'Success'}/>
+                ) : (
+                  <></>
+                )
+              }  
               <Pager allowedPageSizes={[5, 10, 20]} showPageSizeSelector={true} />
               <Paging defaultPageSize={10} />
           </DataGrid>

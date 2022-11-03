@@ -24,7 +24,7 @@ router.post("/auth/forgot", authValidator.forgot, authController.forgot);
 router.post("/auth/reset", authValidator.reset, authController.reset);
 router.post("/profile/update", profileValidator.update, userController.update);
 
-
+router.get("/user/users", userController.users);
 router.get("/user/:id", userController.getuser);
 router.post("/user/update", userController.updateuser);
 router.post("/user/create", userController.createuser);
@@ -35,7 +35,13 @@ router.post("/membership/saveproposal", membershipController.saveproposal);
 router.get("/membership/memberships", membershipController.memberships);
 router.get("/membership/proposals", membershipController.proposals);
 router.post("/membership/updateuserplan", membershipController.updateuserplan);
-router.get("/signals/getall", signalController.users);
+
+router.post("/signal/spot", signalController.spot);
+router.get("/signal/market", signalController.market);
+router.get("/signal/kucoin", signalController.kucoin);
+router.get("/signal/bitfinex", signalController.bitfinex);
+router.get("/signal/ftx", signalController.ftx);
+router.get("/signal/future", signalController.future);
 
 
 module.exports = router;

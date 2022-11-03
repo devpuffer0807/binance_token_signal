@@ -11,7 +11,6 @@ import { SIGNAL_DATA } from "../../config";
 
 export default function Menu(props) {
   const handleCurSymbolChange = (key) => {
-    console.log(props.signal)
     props.setSignal(key);
   }
   return (
