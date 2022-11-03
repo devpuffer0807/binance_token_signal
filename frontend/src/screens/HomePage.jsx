@@ -87,7 +87,9 @@ export default function HomePage() {
     })
     .catch((e) => console.error(e));
   }
+
   useEffect(() => {
+    loadGridData();
     let timer = setInterval(() => {
       loadGridData();
     }, 10000);
@@ -100,6 +102,13 @@ export default function HomePage() {
   }, [signal]);
   if (!user) {
     return <Navigate to="/login" />;
+  }
+  const lastPriceCellRender = (cellData)  => {
+    let value = cellData.value;
+    if(value >= 0)
+      return (<span style={{color: 'green'}}>{value}</span>)
+    else
+    return (<span style={{color: 'red'}}>{value}</span>)
   }
   return (
     <div className="HomePage">
@@ -114,10 +123,10 @@ export default function HomePage() {
               <Grouping autoExpandAll={true} />
               <FilterRow visible={true} />
               <Selection mode={'single'} />
-              <Column dataField={'Signal_Time'} caption={'Signal Time'}/>  
+              <Column dataField={'Signal_Time'} caption={'Signal Time'} />  
               <Column dataField={'Count'} caption={'Count'}/>  
               <Column dataField={'Symbol'} caption={'Symbol'}/>  
-              <Column dataField={'Last_Price'} caption={'Last Price'}/>  
+              <Column dataField={'Last_Price'} caption={'Last Price'} cellRender={lastPriceCellRender}/>  
               <Column dataField={'Percent'} caption={'Percent'}/>  
               <Column dataField={'24h_change'} caption={'24h change'}/>  
               <Column dataField={'Total'} caption={'Total'}/>

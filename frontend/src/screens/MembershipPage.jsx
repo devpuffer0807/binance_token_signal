@@ -16,7 +16,9 @@ import { SERVER_URL, MEMBERSHIP_PLAN } from "../config";
 import "react-image-upload/dist/index.css";
 import { Navigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-
+import WhitdrawImage from '../assets/images/whitdraw.png';
+import WalletImage from '../assets/images/wallet.jpg';
+import Transfercode from '../assets/images/transfercode.png';
 
 const MembershipPlanPage = (props) => {
   return (
@@ -70,7 +72,7 @@ const SelectUSDTPage = (props) => {
         <div>
           <div className="mb-3 fs-6 fw-semibold text-primary">Send USDT to Whaler Hunter App Wallet</div>
           <div className="mb-3 text-primary-1 fs-6 fw-semibold">SELECT USDT</div>
-          <Image src="https://whalehuntapp.com/assets/whitdraw.png"/>
+          <Image src={WhitdrawImage} />
         </div>
         <div className="d-flex justify-content-end">
           <Button className="bg-primary-1 text-white border border-0 me-3" onClick={() => {props.setPage(0)}}>Previous</Button>
@@ -87,9 +89,9 @@ const CopyWalletAddress = (props) => {
           <div className="mb-3 text-primary-1 fs-6 fw-semibold">SEND ONLY 71.00 USDT !NEITHER MORE NOR LESS!</div>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label><small className="fw-semibold text-primary">Copy This Address</small></Form.Label>
-            <Form.Control type="text" value="TU5hm4GB1s5JcnoxzF5nv4gzpZ4AWopSHn" readOnly/>
+            <Form.Control type="text" value="TSYDhPiovapPSm5vYXWCez3bEnqV9SNL7w" readOnly/>
           </Form.Group>
-          <Image src="https://whalehuntapp.com/assets/tron.jpg"/>
+          <Image src={WalletImage}/>
         </div>
         <div className="d-flex justify-content-end">
           <Button className="bg-primary-1 text-white border border-0 me-3" onClick={() => {props.setPage(1)}}>Previous</Button>
@@ -104,7 +106,7 @@ const InputTransferCode = (props) => {
       <div>
           <div className="mb-3 fs-6 fw-semibold text-primary">Paste Transfer Code When Transfer Completed</div>
           <div className="mb-3 fs-6 fw-semibold text-primary">Check Wallet > Deposit & Witdrawal History</div>
-          <Image src="https://whalehuntapp.com/assets/transfercode.png"/>
+          <Image src={Transfercode}/>
           <Form.Group className="my-3" controlId="formBasicEmail">
             <Form.Label><small className="fw-semibold text-primary">Transfer Code</small></Form.Label>
             <Form.Control type="text" placeholder="Transfer Code" onChange={(e) => props.setTransfercode(e.target.value)}/>
