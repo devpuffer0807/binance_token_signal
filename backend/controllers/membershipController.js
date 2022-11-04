@@ -145,8 +145,7 @@ module.exports = {
       }
       
       let date = new Date();
-      let newDate;
-      console.log(period)
+      
       if(MEMBERSHIP_PLAN[plan].PERIOD_UNIT == "month") {
         date = new Date(date.setMonth(date.getMonth() + Number(period)));
       }
@@ -157,9 +156,11 @@ module.exports = {
       update.membershipPlan = plan;
       update.expireDate = date;
       await user.updateOne(update);
-      let upProposal = proposal;
-      upProposal.state = false;
-      await proposal.updateOne(upProposal);
+      if(mode) {
+        let upProposal = proposal;
+        upProposal.state = false;
+        await proposal.updateOne(upProposal);
+      }
       res.json({status: true, message: "Successful update!"});
     }
     catch { 
