@@ -16,16 +16,16 @@ export const MEMBERSHIP_PLAN =
     },
     BASIC:{
       TITLE: "1 Month Subscription",
-      CONTENT: "Buy 30 Days Subscription Steps 30 Days Subscription Fee: 71.00 USDT",
+      CONTENT: "Buy 30 Days Subscription Steps 30 Days Subscription Fee: 51.00 USDT",
       STYLE: "info",
-      PRICE: 71,
+      PRICE: 51,
       PERIOD_UNIT: "month"
     },
     PLUS:{
       TITLE: "3 Month Subscription",
-      CONTENT: "Buy 90 Days Subscription Steps 90 Days Subscription Fee: 176.00 USDT",
+      CONTENT: "Buy 90 Days Subscription Steps 90 Days Subscription Fee: 126.00 USDT",
       STYLE: "danger",
-      PRICE: 176,
+      PRICE: 126,
       PERIOD_UNIT: "month"
     },
   };
