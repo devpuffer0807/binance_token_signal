@@ -24,9 +24,9 @@ export default function LoginPage() {
   const auth = useAuth();
 
   const {user} = useAuth();
-  if(user) {
-    return <Navigate to="/"/>;
-  }
+  // if(user) {
+  //   return <Navigate to="/"/>;
+  // }
 
   const Login = () => {
 
@@ -54,6 +54,7 @@ export default function LoginPage() {
       .then((res) => {
         if (res.data.status === true) {
           setIsLoding(false);
+          res.data.data.token = res.data.token;
           auth.login(res.data.data);
           toast.success(res.data.message);
         } else {

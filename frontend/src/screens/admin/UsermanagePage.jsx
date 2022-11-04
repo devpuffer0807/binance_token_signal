@@ -69,6 +69,9 @@ export default function UsermanagePage() {
       nickName: nickName,
       userRole: userRole,
     };
+    let header = {
+      'x-auth-token': user.token,
+    }
     if(status == "edit") {
       if(userid == "") {
         toast.error("userid error.");
@@ -77,6 +80,7 @@ export default function UsermanagePage() {
       axios({
         method: 'post',
         url: SERVER_URL + '/user/update',
+        headers: header,
         data: payload
       })
       .then((res) => {
@@ -94,7 +98,8 @@ export default function UsermanagePage() {
       axios({
         method: 'post',
         url: SERVER_URL + '/user/create',
-        data: payload
+        data: payload,
+        headers: header
       }).then((res) => {
         const recvData = res.data;
         if(!recvData.status) {
@@ -104,12 +109,19 @@ export default function UsermanagePage() {
         toast.success(recvData.message);
         loadUsersHandler();
         setShow(false);
+      })
+      .catch((e) => {
+        toast.warning(e.response.data.message);
+        if(e.response.status == 401) {
+          window.location.replace('/login');
+        }
       });
     }
     if(status == "delete") {
       axios({
         method: 'get',
         url: SERVER_URL + '/user/delete/' + userid,
+        headers: header
       })
       .then((res) => {
         const recvData = res.data;
@@ -121,11 +133,19 @@ export default function UsermanagePage() {
         loadUsersHandler();
         setShow(false);
       })
-      .catch((ex) => console.error(ex));
+      .catch((e) => {
+        toast.warning(e.response.data.message);
+        if(e.response.status == 401) {
+          window.location.replace('/login');
+        }
+      });
     }
   }
   const handleShow = (userId, actionType) => {
     if(actionType != "create") {
+      let header = {
+        'x-auth-token': user.token,
+      }
       if(!userId) {
         toast.error('Please select correct user.');
         return;
@@ -133,6 +153,7 @@ export default function UsermanagePage() {
       axios({
         method: 'get',
         url: SERVER_URL + '/user/' + userId,
+        headers: header
       })
       .then((response) => {
         const resData = response.data;
@@ -152,7 +173,12 @@ export default function UsermanagePage() {
           setStatus("delete");
         }
         setShow(true);
-      }).catch((e) => console.error(e));
+      }).catch((e) => {
+        toast.warning(e.response.data.message);
+        if(e.response.status == 401) {
+          window.location.replace('/login');
+        }
+      });
     }
     if (status == "create"){
       setFirstName("");
@@ -164,9 +190,13 @@ export default function UsermanagePage() {
     setShow(true);
   } 
   const loadUsersHandler = () => {
+    let header = {
+      'x-auth-token': user.token,
+    }
     axios({
       method: 'get',
       url: SERVER_URL + '/user/users',
+      headers: header
     })
     .then((response) => {
       let tmpUsers = response.data.users;
@@ -174,7 +204,12 @@ export default function UsermanagePage() {
         tmpUsers[i].No = i + 1;
       }
       setUsers(tmpUsers);
-    }).catch((e) => console.error(e));
+    }).catch((e) => {
+      toast.warning(e.response.data.message);
+      if(e.response.status == 401) {
+        window.location.replace('/login');
+      }
+    });
   }
   useEffect(() => {
     loadUsersHandler();

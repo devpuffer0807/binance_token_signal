@@ -49,6 +49,18 @@ const userSchema = new mongoose.Schema({
     min: 6,
     defaultValue: "TRYAL"
   },
+  apiKey: {
+    type: String,
+    require: true,
+    max: 1024,
+    min: 6,
+  },
+  secret: {
+    type: String,
+    require: true,
+    max: 1024,
+    min: 6,
+  },
   expireDate: {
     type: Date,
     default: Date.now,

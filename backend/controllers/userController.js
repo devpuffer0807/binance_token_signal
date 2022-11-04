@@ -7,7 +7,6 @@ module.exports = {
   update: async (req, res) => {
     try {
       const user = await User.findOne({userEmail : req.body.userEmail});
-      // console.log(req.body)
       const update = {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
@@ -15,8 +14,9 @@ module.exports = {
           userEmail: req.body.userEmail,
           userPassword: md5(req.body.userPassword),
           photo: req.body.photo,
+          apiKey: req.body.apiKey,
+          secret: req.body.secret
       }
-
       await user.updateOne(update);
 
       res.json({status: true, message: "Update Successful!"});

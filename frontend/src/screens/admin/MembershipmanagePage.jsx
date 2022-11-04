@@ -25,8 +25,11 @@ import DataGrid, {
 import axios from "axios";
 import { SERVER_URL, MEMBERSHIP_PLAN } from "../../config";
 import { FaUserEdit } from "react-icons/fa";
+import { useAuth } from "../../config/AuthProvider";
+import { Navigate } from "react-router-dom";
 
 export default function MembershipmanagePage() {
+  const [user] = useAuth();
   const [subscriptions, setSubscriptions] = useState([]);
   const [users, setUsers] = useState([]);
   const [show, setShow] = useState(false);
@@ -36,15 +39,23 @@ export default function MembershipmanagePage() {
   const [currentPlan, setCurrentPlan] = useState("TRYAL");
   const [period, setPeriod] = useState(1);
   const [editmode, setEditmode] = useState(false);
-  
-  
+  useEffect(() => {
+    loadProposalHandle();
+  }, []);
+  if (user.role != "ADMIN") {
+    return <Navigate to="/" />;
+  }
   const handleClose = () => {
     setShow(false);
   }
   const loadProposalHandle = () => {
+    let header = {
+      'x-auth-token': user.token,
+    }
     axios({
       method: 'get',
-      url: SERVER_URL + '/membership/proposals'
+      url: SERVER_URL + '/membership/proposals',
+      headers: header
     })
     .then((response) => {
       const recvData = response.data;
@@ -61,25 +72,35 @@ export default function MembershipmanagePage() {
         setSubscriptions(tmpProposals)
       }
     })
-    .catch((ex) => {console.error(ex)})
+    .catch((e) => {
+      toast.warning(e.response.data.message);
+      if(e.response.status == 401) {
+        window.location.replace('/login');
+      }
+    })
   }
   const loadMembershipsHandle = () => {
+    let header = {
+      'x-auth-token': user.token,
+    }
     axios({
       method: 'get',
       url: SERVER_URL + '/user/users',
+      headers: header
     })
     .then((response) => {
       let tmpUsers = response.data.users;
-      console.log(tmpUsers)
       for( let i = 0; i < tmpUsers.length; i ++) {
         tmpUsers[i].No = i + 1;
       }
       setUsers(tmpUsers);
-    }).catch((e) => console.error(e));
+    }).catch((e) => {
+      toast.warning(e.response.data.message);
+      if(e.response.status == 401) {
+        window.location.replace('/login');
+      }
+    });
   }
-  useEffect(() => {
-    loadProposalHandle();
-  }, []);
   const tabSelectHandle = (e) => {
     if(e == 'subscription') {
       loadProposalHandle();
@@ -100,10 +121,14 @@ export default function MembershipmanagePage() {
       period: period,
       mode: editmode,
     };
+    let header = {
+      'x-auth-token': user.token,
+    }
     axios({
       method: 'post',
       url: SERVER_URL + '/membership/updateuserplan',
-      data: payload
+      data: payload,
+      headers: header
     })
     .then((res) => {
       const recvData = res.data;
@@ -119,7 +144,12 @@ export default function MembershipmanagePage() {
         loadMembershipsHandle();
       }
       setShow(false);
-    }).catch((e) => console.error(e));
+    }).catch((e) => {
+      toast.warning(e.response.data.message);
+      if(e.response.status == 401) {
+        window.location.replace('/login');
+      }
+    });
   }
   const handleShow = (userId, mode) => {
     setId(userId);

@@ -2,6 +2,7 @@ var User = require("../models/users");
 var crypto = require("crypto");
 var nodemailer = require("nodemailer");
 var md5 = require("md5");
+const jwt = require('jsonwebtoken');
 
 var errorMessage = require("../locale/en");
 var errorCode = require("../constants/errorCode");
@@ -55,7 +56,6 @@ module.exports = {
       expireDate: date.addDays(MEMBERSHIP_PLAN.TRYAL.PERIOD),
       membershipPlan: "TRYAL"
     });
-
     try {
       await User.create(user);
       res.json({ status: true, message: "Register Successful!" });
@@ -79,10 +79,20 @@ module.exports = {
         });
 
       if (userinfo.userPassword == user.userPassword) {
+        const payload = {
+          user : userinfo,
+          tokenExpire : new Date().getTime() + process.env.EXPIRE_MINS * 60000
+        }
+        let token = jwt.sign(
+          payload,
+          process.env.JWT_SECRET,
+        );
+
         res.json({
           status: true,
           message: "Login Successful!",
           data: userinfo,
+          token: token
         });
       } else {
         res.json({

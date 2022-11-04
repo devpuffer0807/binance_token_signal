@@ -137,9 +137,13 @@ export default function MembershipPage() {
       transferCode: transfercode,
       user: user  
     };
+    let header = {
+      'x-auth-token': user.token,
+    }
     axios({
       method: 'post',
       url: SERVER_URL + '/membership/saveproposal',
+      headers: header,
       data: payload
     })
     .then((response) => {
@@ -151,7 +155,12 @@ export default function MembershipPage() {
       else {
         toast(recvData.message);
       }
-    }).catch((e) => console.error(e));
+    }).catch((e) => {
+      toast.warning(e.response.data.message);
+      if(e.response.status == 401) {
+        window.location.replace('/login');
+      }
+    });
   }
 
   return (

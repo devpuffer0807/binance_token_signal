@@ -22,6 +22,7 @@
     "fs": "^0.0.1-security",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
     "mongoose": "^6.5.2",
     "morgan": "~1.9.1",

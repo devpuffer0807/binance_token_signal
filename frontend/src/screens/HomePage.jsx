@@ -24,6 +24,7 @@ import axios from "axios";
 import Overview from './apiconfig/Overview.json';
 import { SERVER_URL,SIGNAL_DATA } from '../config/index';
 import { ToastContainer, toast } from "react-toastify";
+import { FaLongArrowAltUp, FaLongArrowAltDown } from 'react-icons/fa';
 
 let signalForRequest = "GETALL";
 export default function HomePage() {
@@ -42,6 +43,8 @@ export default function HomePage() {
     let link = SERVER_URL;
     let payload = {};
     let actionMethod = 'post'
+    console.log(signalForRequest);
+    
     switch(SIGNAL_DATA[signalForRequest].VALUE) {
       case 4:
         actionMethod = 'get';
@@ -71,10 +74,13 @@ export default function HomePage() {
         }
         break;
     }
-    
+    let header = {
+      'x-auth-token': user.token,
+    }
     axios({
       method : actionMethod,
       url : link,
+      headers: header,
       data : payload
     })
     .then((res) => {
@@ -85,7 +91,16 @@ export default function HomePage() {
       }
       setData(recvData.data);
     })
-    .catch((e) => console.error(e));
+    .catch((e) => {
+      toast.warning(e.response.data.message);
+      if(e.response.status == 402) {
+        window.location.replace('/membership');
+      }
+      if(e.response.status == 401) {
+        window.location.replace('/login');
+        return;
+      }
+    });
   }
 
   useEffect(() => {
@@ -99,6 +114,7 @@ export default function HomePage() {
   }, []);
   useEffect(() => {
     signalForRequest = signal;
+    loadGridData();
   }, [signal]);
   if (!user) {
     return <Navigate to="/login" />;
@@ -110,6 +126,59 @@ export default function HomePage() {
     else
     return (<span style={{color: 'red'}}>{value}</span>)
   }
+  const percentCellRender = (cellData) => {
+    let val = cellData.value;
+    if(val < 0) {
+      return (
+        <>
+          <FaLongArrowAltDown style={{color: 'red', 'margin-top': '-3'}}/> {val} %
+        </>
+      )
+    }
+    else {
+      return (
+        <>
+          <FaLongArrowAltUp style={{color: 'green', 'margin-top': '-3'}}/> {val} %
+        </>
+      )
+    }
+  }
+  const onedayChangeCellRender = (cellData) => {
+    let val = cellData.value;
+    if(val < 0) {
+      return (
+        <>
+          <FaLongArrowAltDown style={{color: 'red', 'margin-top': '-3'}}/> {val}
+        </>
+      )
+    }
+    else {
+      return (
+        <>
+          <FaLongArrowAltUp style={{color: 'green', 'margin-top': '-3'}}/> {val}
+        </>
+      )
+    }
+  }
+  const symbolCellRender = (cellData) => {
+    let val = cellData.value;
+    return (
+      <Button className="w-100" onMouseEnter={(e) => {
+        setChartsymbol(val);
+        setChartstate(true);
+      }} 
+      onMouseLeave={() => setChartstate(false)}
+      onClick={() => {
+        if(SIGNAL_DATA[signalForRequest].VALUE == 8) {
+          window.open('https://www.binance.com/en/futures/' + val,'_blank');
+        }
+        else {
+          window.open('https://www.binance.com/en/trade/' + val,'_blank');
+        }
+      }}>{val}</Button>
+    )
+  }
+  
   return (
     <div className="HomePage">
       <ToastContainer />
@@ -125,16 +194,16 @@ export default function HomePage() {
               <Selection mode={'single'} />
               <Column dataField={'Signal_Time'} caption={'Signal Time'} />  
               <Column dataField={'Count'} caption={'Count'}/>  
-              <Column dataField={'Symbol'} caption={'Symbol'}/>  
-              <Column dataField={'Last_Price'} caption={'Last Price'} cellRender={lastPriceCellRender}/>  
-              <Column dataField={'Percent'} caption={'Percent'}/>  
-              <Column dataField={'24h_change'} caption={'24h change'}/>  
+              <Column dataField={'Symbol'} caption={'Symbol'} cellRender={symbolCellRender}/>  
+              <Column dataField={'Last_Price'} caption={'Last Price'} />  
+              <Column dataField={'Percent'} caption={'Percent'} cellRender={percentCellRender} alignment={'left'}/>  
+              <Column dataField={'24h_change'} caption={'24h change'} cellRender={onedayChangeCellRender} alignment={'left'}/>  
               <Column dataField={'Total'} caption={'Total'}/>
               {
                 SIGNAL_DATA[signal].VALUE == 8 ? (
                   <Column dataField={'Signal'} caption={'Signal'}/>
                 ) : (
-                  <Column dataField={'Series'} caption={'Series'}/>
+                  <Column dataField={'Series'} caption={'Series'} />
                 )
               }  
               {

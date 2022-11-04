@@ -23,12 +23,15 @@ export default function ProfilePage() {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userPhoto, setUserPhoto] = useState("");
+  const [apikey, setApikey] = useState("");
+  const [secret, setSecret] = useState("");
   const [firstNameVal, ] = useState(true);
   const [lastNameVal, ] = useState(true);
   const [nickNameVal, ] = useState("");
   const [userEmailVal, ] = useState(true);
   const [userPasswordVal, ] = useState(true);
   const [isLoding, setIsLoding] = useState(false);
+
 
   const { user } = useAuth();
 
@@ -38,6 +41,10 @@ export default function ProfilePage() {
     setNicktName(user.nickName);
     setUserEmail(user.userEmail);
     setUserPhoto(user.photo);
+    if(user.apiKey)
+      setApikey(user.apiKey);
+    if(user.secret)
+      setSecret(user.secret);
   }, []);
 
   const getImageFileObject = (imageFile) => {
@@ -66,10 +73,15 @@ export default function ProfilePage() {
       userEmail: userEmail,
       userPassword: userPassword,
       photo: userPhoto,
+      apiKey: apikey,
+      secret: secret
     };
-
+    console.log(data)
+    let header = {
+      'x-auth-token': user.token,
+    }
     axios
-      .post(SERVER_URL + "/profile/update", data)
+      .post(SERVER_URL + "/profile/update", data, {headers: header})
       .then((res) => {
         if (res.data.status === true) {
           setTimeout(() => {
@@ -178,13 +190,36 @@ export default function ProfilePage() {
                 <Form.Control
                   required
                   type="password"
-                  placeholder="Password"
-                  className= { userPasswordVal ? "py-3" : "py3 invalid" } 
+                  placeholder="password"
+                  className={userPassword ? "py-3" : "py-3 invalid"}
                   value={userPassword}
                   onChange={(e) => setUserPassword(e.target.value)}
                 />
             </Form.Group>
           </Row>
+          <Row className="mt-4">
+            <Form.Group controlId="validationCustom01">
+                <Form.Control
+                  type="text"
+                  placeholder="apikey"
+                  className="py-3"
+                  value={apikey}
+                  onChange={(e) => {setApikey(e.target.value);}}
+                />
+            </Form.Group>
+          </Row>
+          <Row className="mt-4">
+            <Form.Group controlId="validationCustom01">
+                <Form.Control
+                  type="text"
+                  placeholder="secret"
+                  className="py-3"
+                  value={secret}
+                  onChange={(e) => setSecret(e.target.value)}
+                />
+            </Form.Group>
+          </Row>
+          
           <Row className="mt-4 d-flex mb-5 justify-content-center align-items-center">
             <Col lg={12} md={12} sm={12}>
               {isLoding === true ? (
