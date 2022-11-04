@@ -29,7 +29,7 @@ import { useAuth } from "../../config/AuthProvider";
 import { Navigate } from "react-router-dom";
 
 export default function MembershipmanagePage() {
-  const [user] = useAuth();
+  const {user} = useAuth();
   const [subscriptions, setSubscriptions] = useState([]);
   const [users, setUsers] = useState([]);
   const [show, setShow] = useState(false);
