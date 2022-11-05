@@ -15,9 +15,6 @@ export default function VerifyPage() {
   const { state } = useLocation(); 
 
   const { user } = useAuth();
-  if (user) {
-    return <Navigate to="/" />;
-  }
 
   const resetPassword = async () => {
 
