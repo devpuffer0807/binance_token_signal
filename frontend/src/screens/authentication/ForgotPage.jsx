@@ -15,9 +15,6 @@ export default function ForgotPage() {
   const [isLoding, setIsLoding] = useState(false);
 
   const { user } = useAuth();
-  if (user) {
-    return <Navigate to="/" />;
-  }
 
   const forgotPassword = async () => {
     if (userEmail === "") {
