@@ -86,7 +86,7 @@ const CopyWalletAddress = (props) => {
     <div className="CopyWalletAddress">
       <div>
           <div className="mb-3 fs-6 fw-semibold text-primary">Submit Your Subscription Fees</div>
-          <div className="mb-3 text-primary-1 fs-6 fw-semibold">SEND ONLY 71.00 USDT !NEITHER MORE NOR LESS!</div>
+          <div className="mb-3 text-primary-1 fs-6 fw-semibold">SEND ONLY {MEMBERSHIP_PLAN[props.curplan].PRICE}.00 USDT !NEITHER MORE NOR LESS!</div>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label><small className="fw-semibold text-primary">Copy This Address</small></Form.Label>
             <Form.Control type="text" value="TSYDhPiovapPSm5vYXWCez3bEnqV9SNL7w" readOnly/>
@@ -179,7 +179,7 @@ export default function MembershipPage() {
                     If your request is correct, it will be approved within 12 hours. To learn the TxId code, you can follow the instruction athttps://www.binance.com/en/support/faq/2c325e53daf04442adbaf8f6ba052f71. Incorrect requests will be denied.
                   </Card.Text>
                     {
-                      page == 1 ? <SelectUSDTPage setPage={setPage} planKey={curplan}/> : page == 2 ? <CopyWalletAddress setPage={setPage} />
+                      page == 1 ? <SelectUSDTPage setPage={setPage} planKey={curplan}/> : page == 2 ? <CopyWalletAddress setPage={setPage} curplan={curplan} />
                       : <InputTransferCode setPage={setPage} curplan={curplan} transfercode={transfercode} setTransfercode={setTransfercode} submitHandler={membershipSubmitHandler}/>
                     }
                 </Card.Body>
