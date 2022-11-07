@@ -50,7 +50,7 @@ module.exports = {
           Percent: Math.round(signal.percent * 10000) / 10000,
           '24h_change' : Math.round(signal['24h_change'] * 10000) / 10000,
           Total: Math.round(signal.total * 10000) / 10000,
-          Series: signal.series
+          Series: signal.series,
         });
       });
       res.json({status: true, message: "true", data: sendData});
@@ -161,7 +161,8 @@ module.exports = {
           '24h_change' : Math.round(signal['24h_change'] * 10000) / 10000,
           Total: Math.round(signal.total * 10000) / 10000,
           Signal: signal.signal,
-          Success: signal.success
+          Success: signal.success,
+          Arrow: signal.arrow
         });
       });
       res.json({status: true, message: "true", data: sendData});

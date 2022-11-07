@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Row } from "react-bootstrap";
+import { Button, Container, Row, Card, Col, Form } from "react-bootstrap";
 import { useAuth } from "../config/AuthProvider";
 import { Navigate } from "react-router-dom";
 import DataGrid, {
@@ -27,15 +27,25 @@ import { ToastContainer, toast } from "react-toastify";
 import { FaLongArrowAltUp, FaLongArrowAltDown } from 'react-icons/fa';
 
 let signalForRequest = "GETALL";
+let tradeForRequest = false;
 export default function HomePage() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [futuredata, setFuturedata] = useState([]);
   const [chartstate, setChartstate] = useState(false);
   const [chartsymbol, setChartsymbol] = useState(false);
-  const [futurestate, setFuturestate] = useState(false);
   const [playSound] = useSound(mySound);
   const [signal, setSignal] = useState("GETALL");
+  const [trade, setTrade] = useState(false);
+  const [amount, setAmount] = useState(10);
+  const [profit, setProfit] = useState(10);
+  const [checkprofit, setCheckprofit] = useState(true);
+  const [stoploss, setStoploss] = useState(10);
+  const [checkstoploss, setCheckstoploss] = useState(true);
+  const [leverage, setLeverage] = useState(75);
+  const [keystatus, setKeystatus] = useState("");
+
 
   let req = require('./apiconfig/Overview.json');
 
@@ -43,36 +53,40 @@ export default function HomePage() {
     let link = SERVER_URL;
     let payload = {};
     let actionMethod = 'post'
-    console.log(signalForRequest);
-    
-    switch(SIGNAL_DATA[signalForRequest].VALUE) {
-      case 4:
-        actionMethod = 'get';
-        link = SERVER_URL + '/signal/market';
-        break;
-      case 5:
-        actionMethod = 'get';
-        link = SERVER_URL + '/signal/kucoin';    
-        break;
-      case 6:
-        actionMethod = 'get';
-        link = SERVER_URL + '/signal/bitfinex';
-        break;
-      case 7:
-        actionMethod = 'get';
-        link = SERVER_URL + '/signal/ftx';
-        break;
-      case 8:
-        actionMethod = 'get';
-        link = SERVER_URL + '/signal/future'
-        break;
-      default:
-        actionMethod = 'post';
-        link = SERVER_URL + '/signal/spot';
-        payload = {
-          type: signalForRequest
-        }
-        break;
+    if(tradeForRequest) {
+      actionMethod = 'get';
+      link = SERVER_URL + '/signal/future';
+    }
+    else {
+      switch(SIGNAL_DATA[signalForRequest].VALUE) {
+        case 4:
+          actionMethod = 'get';
+          link = SERVER_URL + '/signal/market';
+          break;
+        case 5:
+          actionMethod = 'get';
+          link = SERVER_URL + '/signal/kucoin';    
+          break;
+        case 6:
+          actionMethod = 'get';
+          link = SERVER_URL + '/signal/bitfinex';
+          break;
+        case 7:
+          actionMethod = 'get';
+          link = SERVER_URL + '/signal/ftx';
+          break;
+        case 8:
+          actionMethod = 'get';
+          link = SERVER_URL + '/signal/future'
+          break;
+        default:
+          actionMethod = 'post';
+          link = SERVER_URL + '/signal/spot';
+          payload = {
+            type: signalForRequest
+          }
+          break;
+      }
     }
     let header = {
       'x-auth-token': user.token,
@@ -89,7 +103,12 @@ export default function HomePage() {
         toast.error(recvData.message);
         return;
       }
-      setData(recvData.data);
+      if (SIGNAL_DATA[signalForRequest].VALUE == 8 || trade) {
+        setFuturedata(recvData.data);
+      }
+      else {
+        setData(recvData.data);
+      }
     })
     .catch((e) => {
       toast.warning(e.response.data.message);
@@ -101,6 +120,24 @@ export default function HomePage() {
         return;
       }
     });
+    if(tradeForRequest) {
+      // axios({
+      //   method: 'get',
+      //   url : SERVER_URL + '/trade/balance',
+      //   headers: header
+      // })
+      // .then((res) => {
+      //   if(res.data.status) {
+      //     setKeystatus("API Key Status Ok.");
+      //   }
+      //   else {
+      //     setKeystatus(res.data.message )
+      //   }
+      // })
+      // .catch((e) => {
+      //   console.error(e);
+      // })
+    }
   }
 
   useEffect(() => {
@@ -114,31 +151,29 @@ export default function HomePage() {
   }, []);
   useEffect(() => {
     signalForRequest = signal;
+    setTrade(false);
     loadGridData();
   }, [signal]);
+  useEffect(() => {
+    tradeForRequest = trade;
+    loadGridData();
+  }, [trade]);
   if (!user) {
     return <Navigate to="/login" />;
-  }
-  const lastPriceCellRender = (cellData)  => {
-    let value = cellData.value;
-    if(value >= 0)
-      return (<span style={{color: 'green'}}>{value}</span>)
-    else
-    return (<span style={{color: 'red'}}>{value}</span>)
   }
   const percentCellRender = (cellData) => {
     let val = cellData.value;
     if(val < 0) {
       return (
         <>
-          <FaLongArrowAltDown style={{color: 'red', 'margin-top': '-3'}}/> {val} %
+          <FaLongArrowAltDown style={{color: 'red', 'marginTop': '-3'}}/> {val} %
         </>
       )
     }
     else {
       return (
         <>
-          <FaLongArrowAltUp style={{color: 'green', 'margin-top': '-3'}}/> {val} %
+          <FaLongArrowAltUp style={{color: 'green', 'marginTop': '-3'}}/> {val} %
         </>
       )
     }
@@ -148,14 +183,14 @@ export default function HomePage() {
     if(val < 0) {
       return (
         <>
-          <FaLongArrowAltDown style={{color: 'red', 'margin-top': '-3'}}/> {val}
+          <FaLongArrowAltDown style={{color: 'red', 'marginTop': '-3'}}/> {val}
         </>
       )
     }
     else {
       return (
         <>
-          <FaLongArrowAltUp style={{color: 'green', 'margin-top': '-3'}}/> {val}
+          <FaLongArrowAltUp style={{color: 'green', 'marginTop': '-3'}}/> {val}
         </>
       )
     }
@@ -178,14 +213,68 @@ export default function HomePage() {
       }}>{val}</Button>
     )
   }
-  
+  const signalCellRender =(cellData) => {
+    let val = cellData.value;
+    if(val.includes('Long')) {
+      return (
+        <>
+          <FaLongArrowAltUp style={{color: 'green', 'marginTop': '-3'}}/> {val}
+        </>
+      )
+    }
+    if(val.includes('Short')) {
+      return (
+        <>
+          <FaLongArrowAltDown style={{color: 'red', 'marginTop': '-3'}}/> {val}
+        </>
+      )
+    }
+  }
+  const longCellRender = (cellData) => {
+    let val = cellData.value;
+    return (
+      <Button variant="success" className="w-100" onClick={() => {newOrder(val, 'long')}}>Long</Button>
+    )
+  }
+  const shortCellRender = (cellData) => {
+    let val = cellData.value;
+    return (
+      <Button variant="danger" className="w-100" onClick={() => {newOrder(val, 'short')}}>Short</Button>
+    )
+  }
+  const newOrder = (selectedsymbol, side) => {
+    console.log(selectedsymbol, side)
+  }
   return (
     <div className="HomePage">
       <ToastContainer />
-      <Menu setSignal={setSignal} signal={signal}/>
-        <Container>
-          <DataGrid
-              dataSource={data}
+      <Menu setSignal={setSignal} signal={signal} setTrade={setTrade}/>
+      <Container>
+      {
+        !trade ? (
+          SIGNAL_DATA[signal].VALUE != 8 ? (
+            <DataGrid
+                dataSource={data}
+                allowColumnReordering={true}
+              >
+                <GroupPanel visible={true} />
+                <Grouping autoExpandAll={true} />
+                <FilterRow visible={true} />
+                <Selection mode={'single'} />
+                <Column dataField={'Signal_Time'} caption={'Signal Time'} />  
+                <Column dataField={'Count'} caption={'Count'}/>  
+                <Column dataField={'Symbol'} caption={'Symbol'} cellRender={symbolCellRender}/>  
+                <Column dataField={'Last_Price'} caption={'Last Price'} />  
+                <Column dataField={'Percent'} caption={'Percent'} cellRender={percentCellRender} alignment={'left'}/>  
+                <Column dataField={'24h_change'} caption={'24h change'} cellRender={onedayChangeCellRender} alignment={'left'}/>  
+                <Column dataField={'Total'} caption={'Total'} />
+                <Column dataField={'Series'} caption={'Series'}/>  
+                <Pager allowedPageSizes={[5, 10, 20]} showPageSizeSelector={true} />
+                <Paging defaultPageSize={10} />
+            </DataGrid>
+          ) : (
+            <DataGrid
+              dataSource={futuredata}
               allowColumnReordering={true}
             >
               <GroupPanel visible={true} />
@@ -199,24 +288,81 @@ export default function HomePage() {
               <Column dataField={'Percent'} caption={'Percent'} cellRender={percentCellRender} alignment={'left'}/>  
               <Column dataField={'24h_change'} caption={'24h change'} cellRender={onedayChangeCellRender} alignment={'left'}/>  
               <Column dataField={'Total'} caption={'Total'}/>
-              {
-                SIGNAL_DATA[signal].VALUE == 8 ? (
-                  <Column dataField={'Signal'} caption={'Signal'}/>
-                ) : (
-                  <Column dataField={'Series'} caption={'Series'} />
-                )
-              }  
-              {
-                SIGNAL_DATA[signal].VALUE == 8 ? (
-                  <Column dataField={'Success'} caption={'Success'}/>
-                ) : (
-                  <></>
-                )
-              }  
+              <Column dataField={'Signal'} caption={'Signal'} />
+              <Column dataField={'Success'} caption={'Success'}/>
               <Pager allowedPageSizes={[5, 10, 20]} showPageSizeSelector={true} />
               <Paging defaultPageSize={10} />
-          </DataGrid>
-        </Container>
+            </DataGrid>
+          )
+        ) : (
+          <>
+            <Card className="mt-3">
+              <Card.Header>Automatic Position Settings</Card.Header>
+              <Card.Body>
+                <Row>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Amount</Form.Label>
+                      <Form.Control type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount" />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Profit</Form.Label>
+                      <Form.Control type="number" value={profit} onChange={(e) => setProfit(e.target.value)} placeholder="Enter profit" />
+                      <Form.Check type="checkbox" checked={checkprofit} onChange={() => setCheckprofit(!checkprofit)} label="Take" />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                        <Form.Label>Stop Loss</Form.Label>
+                        <Form.Control type="number" value={stoploss} onChange={(e) => setStoploss(e.target.value)} placeholder="Enter Stop loss" />
+                        <Form.Check type="checkbox" checked={checkstoploss} onChange={() => setCheckstoploss(!checkstoploss)} label="Take" />
+                      </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Leverage Percent</Form.Label>
+                      <Form.Control type="number" value={leverage} onChange={(e) => setLeverage(e.target.value)} placeholder="Enter Leverage" />
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+            {/* <Card className="mt-3">
+              <Card.Header>{keystatus}</Card.Header>
+              <Card.Body>
+              </Card.Body>
+            </Card> */}
+            <Card className="mt-3">
+              <Card.Body>
+                <DataGrid
+                  dataSource={futuredata}
+                  allowColumnReordering={true}
+                >
+                  <GroupPanel visible={true} />
+                  <Grouping autoExpandAll={true} />
+                  <FilterRow visible={true} />
+                  <Selection mode={'single'} />
+                  <Column dataField={'Signal_Time'} caption={'Signal Time'} />  
+                  <Column dataField={'Count'} caption={'Count'} width={'7%'}/>  
+                  <Column dataField={'Symbol'} caption={'Symbol'} cellRender={symbolCellRender}/>  
+                  <Column dataField={'Last_Price'} caption={'Last Price'} width={'10%'}/>  
+                  <Column dataField={'Percent'} caption={'Percent'} cellRender={percentCellRender} alignment={'left'} width={'10%'}/>  
+                  <Column dataField={'24h_change'} caption={'24h change'} cellRender={onedayChangeCellRender} alignment={'left'} width={'10%'}/>  
+                  <Column dataField={'Total'} caption={'Total'} />
+                  <Column dataField={'Signal'} caption={'Signal'} cellRender={signalCellRender}/>
+                  <Column dataField={'Symbol'} caption={'Long'} cellRender={longCellRender}/>
+                  <Column dataField={'Symbol'} caption={'Short'} cellRender={shortCellRender}/>
+                  <Pager allowedPageSizes={[5, 10, 20]} showPageSizeSelector={true} />
+                  <Paging defaultPageSize={10} />
+                </DataGrid>
+              </Card.Body>
+            </Card>
+          </>
+        )
+      }
+      </Container>
       {
         chartstate && (
           <div className="trading-chart">

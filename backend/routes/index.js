@@ -8,6 +8,7 @@ const profileValidator = require("../middlewares/validators/profile");
 const scanController = require('../controllers/scanController');
 const membershipController = require("../controllers/membershipController");
 const signalController = require("../controllers/signalController");
+const tradeController = require("../controllers/tradeController");
 
 const adminMiddleware = require("../middlewares/admin");
 const commonMiddleware = require("../middlewares/common");
@@ -45,6 +46,8 @@ router.get("/signal/kucoin", [commonMiddleware, membershipMiddleware], signalCon
 router.get("/signal/bitfinex", [commonMiddleware, membershipMiddleware], signalController.bitfinex);
 router.get("/signal/ftx", [commonMiddleware, membershipMiddleware], signalController.ftx);
 router.get("/signal/future", [commonMiddleware, membershipMiddleware], signalController.future);
+
+router.get("/trade/balance", [commonMiddleware], tradeController.balance);
 
 
 module.exports = router;

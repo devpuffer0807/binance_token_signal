@@ -46,6 +46,25 @@ export default function Menu(props) {
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
+          <Nav className="d-flex align-items-center">
+            <Dropdown>
+              <Dropdown.Toggle
+                id="dropdown-basic"
+                className=" fs-5-2 fw-semibold text-primary-1 secondary-btn"
+              >
+                Binance Future Bot
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => {
+                    props.setTrade(true);
+                  }}
+                >
+                  Futures BOT
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
