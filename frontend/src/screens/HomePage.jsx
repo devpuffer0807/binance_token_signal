@@ -121,22 +121,23 @@ export default function HomePage() {
       }
     });
     if(tradeForRequest) {
-      // axios({
-      //   method: 'get',
-      //   url : SERVER_URL + '/trade/balance',
-      //   headers: header
-      // })
-      // .then((res) => {
-      //   if(res.data.status) {
-      //     setKeystatus("API Key Status Ok.");
-      //   }
-      //   else {
-      //     setKeystatus(res.data.message )
-      //   }
-      // })
-      // .catch((e) => {
-      //   console.error(e);
-      // })
+      axios({
+        method: 'get',
+        url : SERVER_URL + '/trade/balance',
+        headers: header
+      })
+      .then((res) => {
+        if(res.data.status) {
+          console.log(res)
+          setKeystatus(res.data.message + 'Total Futures Wallet Balance = ' + res.data.data.Balance);
+        }
+        else {
+          setKeystatus(res.data.message )
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      })
     }
   }
 
@@ -329,11 +330,11 @@ export default function HomePage() {
                 </Row>
               </Card.Body>
             </Card>
-            {/* <Card className="mt-3">
+            <Card className="mt-3">
               <Card.Header>{keystatus}</Card.Header>
               <Card.Body>
               </Card.Body>
-            </Card> */}
+            </Card>
             <Card className="mt-3">
               <Card.Body>
                 <DataGrid

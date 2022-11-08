@@ -2,6 +2,7 @@ var User = require("../models/users");
 var md5 = require("md5");
 const { validate, Joi } = require('express-validation');
 var mongoose = require("mongoose");
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   update: async (req, res) => {
@@ -18,8 +19,16 @@ module.exports = {
           secret: req.body.secret
       }
       await user.updateOne(update);
-
-      res.json({status: true, message: "Update Successful!"});
+      const userinfo = await User.findOne({userEmail : req.body.userEmail});
+      const payload = {
+        user : userinfo,
+        tokenExpire : new Date().getTime() + process.env.EXPIRE_MINS * 60000
+      }
+      let token = jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+      );
+      res.json({status: true, message: "Update Successful!", data: userinfo, token: token});
     }
     catch {
       res.json({status: true, message: "Update Failed!"});

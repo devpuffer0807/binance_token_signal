@@ -3,18 +3,41 @@ module.exports = {
   balance: async (req, res) => {
     const { apiKey, secret } = req.user;
     const client = new Binance({
-      apiKey : 'AQeP1Fm1Z2wpZOk7H9WM4UvlkmBb4xX8AsN8vElRIMCE8ykPRQ98ki7JmhzJDH9U',
-      apiSecret : '35V2VjJ33WtgWTjg42p34gjlsXFak6RUWEoLnP1IkOzj1tkvWdyzP7MFrBmy5nnf',
+      apiKey : apiKey,
+      apiSecret : secret,
       getTime: () => Date.now()
     });
     try{
-      console.log(await client.accountInfo({'recvWindow': 60000}))
-      await client.futuresAccountBalance({'recvWindow': 10000000});
-      return res.json({ status: true, message: "apiKey Ok" });
+      let totalBalance = 0;
+      client.futuresAccountBalance({'recvWindow': 10000000})
+      .then((response) => {
+        response.map(async (element) => {
+          if(element.balance > 0){
+            if(element.asset == 'USDT') {
+              totalBalance += Number(element.balance);
+            }
+            else {
+              client.futuresMarkPrice()
+              .then((prices) => {
+                prices.map((price) => {
+                  if(price.symbol == (element.asset + 'USDT')) {
+                    totalBalance = totalBalance + (Number(price.markPrice) * Number(element.balance))
+                    console.log(totalBalance)
+                  }
+                });
+              })
+              .catch((ex) => console.log(ex));
+            }
+          }
+        });
+        return res.json({ status: true, message: "API Key Status Ok.", data: {Balance: totalBalance} });
+      })
+      .catch((ex) => {
+        return res.json({ status: false, message: ex.message });
+      })
     }
     catch(ex) {
-      console.log(ex);
-      return res.json({ status: false, message: ex.message});
+      return res.json({ status: false, message: ex.message });
     }
   }
 }

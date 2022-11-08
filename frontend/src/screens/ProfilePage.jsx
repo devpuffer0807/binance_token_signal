@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../config/AuthProvider";
 import axios from "axios";
 import { SERVER_URL } from "../config";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import ImageUploader from "react-image-upload";
 import "react-image-upload/dist/index.css";
 
@@ -31,8 +31,8 @@ export default function ProfilePage() {
   const [userEmailVal, ] = useState(true);
   const [userPasswordVal, ] = useState(true);
   const [isLoding, setIsLoding] = useState(false);
-
-
+  
+  const auth = useAuth();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -48,7 +48,6 @@ export default function ProfilePage() {
   }, []);
 
   const getImageFileObject = (imageFile) => {
-    console.log(imageFile.file);
     const formData = new FormData();
     formData.append("file", imageFile.file);
 
@@ -76,7 +75,6 @@ export default function ProfilePage() {
       apiKey: apikey,
       secret: secret
     };
-    console.log(data)
     let header = {
       'x-auth-token': user.token,
     }
@@ -84,6 +82,8 @@ export default function ProfilePage() {
       .post(SERVER_URL + "/profile/update", data, {headers: header})
       .then((res) => {
         if (res.data.status === true) {
+          res.data.data.token = res.data.token;
+          auth.login(res.data.data, true);
           setTimeout(() => {
             setIsLoding(false);
             toast.success(res.data.message);
@@ -106,6 +106,7 @@ export default function ProfilePage() {
 
   return (
     <div className="ProfilePage">
+      <ToastContainer />
       <Container className="col-md-8 col-lg-8 col-sm-10">
         <Form>
           <div className="fs-1 fw-bold text-center text-white">

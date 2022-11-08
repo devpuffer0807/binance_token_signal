@@ -24,9 +24,6 @@ export default function LoginPage() {
   const auth = useAuth();
 
   const {user} = useAuth();
-  // if(user) {
-  //   return <Navigate to="/"/>;
-  // }
 
   const Login = () => {
 
