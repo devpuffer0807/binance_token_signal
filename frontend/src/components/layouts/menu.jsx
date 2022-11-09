@@ -34,6 +34,7 @@ export default function Menu(props) {
                   Object.keys(SIGNAL_DATA).map((key) => {
                     return(
                       <Dropdown.Item
+                        key={{key}}
                         onClick={() => {
                           handleCurSymbolChange(key);
                         }}
