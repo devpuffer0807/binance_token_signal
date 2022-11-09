@@ -1,2 +1,1 @@
-# binance_token_signal
-
+In the project directory, you can run:
