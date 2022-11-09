@@ -8,12 +8,16 @@ module.exports = {
   update: async (req, res) => {
     try {
       const user = await User.findOne({userEmail : req.body.userEmail});
+      let password = md5(req.body.userPassword)
+      if(req.body.userPassword == "") {
+        password = user.userPassword;
+      }
       const update = {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           nickName: req.body.nickName,
           userEmail: req.body.userEmail,
-          userPassword: md5(req.body.userPassword),
+          userPassword: password,
           photo: req.body.photo,
           apiKey: req.body.apiKey,
           secret: req.body.secret
