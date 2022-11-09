@@ -2,4 +2,8 @@
 
 ### `yarn start`
 
+### `npm run start`
+
 ### `yarn dev`
+
+### `npm run dev`
