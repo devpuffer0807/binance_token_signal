@@ -13,15 +13,10 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import TradingViewWidget, { Themes, IntervalTypes } from 'react-tradingview-widget';
 import Menu from "../components/layouts/menu";
-import Loading from "../components/loading";
-import { IoBarChartSharp } from "react-icons/io5";
 import useSound from 'use-sound';
 import mySound from '../assets/Alarm07.wav';
-import TableContainer from "../components/tableContainer";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Table from "react-bootstrap/Table";
 import axios from "axios";
-import Overview from './apiconfig/Overview.json';
 import { SERVER_URL,SIGNAL_DATA } from '../config/index';
 import { ToastContainer, toast } from "react-toastify";
 import { FaLongArrowAltUp, FaLongArrowAltDown } from 'react-icons/fa';
@@ -45,9 +40,6 @@ export default function HomePage() {
   const [checkstoploss, setCheckstoploss] = useState(true);
   const [leverage, setLeverage] = useState(75);
   const [keystatus, setKeystatus] = useState("");
-
-
-  let req = require('./apiconfig/Overview.json');
 
   const loadGridData = () => {
     let link = SERVER_URL;

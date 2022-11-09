@@ -24,7 +24,6 @@ import "./assets/css/main.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-chat-elements/dist/main.css";
-import "./assets/js/RealtimeSupport";
 
 function App() {
   const HomeLayout = () => {

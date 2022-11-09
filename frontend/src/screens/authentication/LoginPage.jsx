@@ -23,8 +23,6 @@ export default function LoginPage() {
   const [isLoding, setIsLoding] = useState(false);
   const auth = useAuth();
 
-  const {user} = useAuth();
-
   const Login = () => {
 
     setIsLoding(true);
