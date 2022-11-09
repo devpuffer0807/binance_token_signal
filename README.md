@@ -1,5 +1,9 @@
 # binance_token_signal
 
-## `yarn start`
+### `yarn start`
 
-## `yarn dev`
+### `npm run start`
+
+### `yarn dev`
+
+### `npm run dev`
