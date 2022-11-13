@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../config/AuthProvider";
 import axios from "axios";
 import { SERVER_URL } from "../config";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import ImageUploader from "react-image-upload";
 import "react-image-upload/dist/index.css";
 
@@ -106,7 +106,6 @@ export default function ProfilePage() {
 
   return (
     <div className="ProfilePage">
-      <ToastContainer />
       <Container className="col-md-8 col-lg-8 col-sm-10">
         <Form>
           <div className="fs-1 fw-bold text-center text-white">

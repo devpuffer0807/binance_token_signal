@@ -10,9 +10,6 @@ import { SIGNAL_DATA } from "../../config";
 
 
 export default function Menu(props) {
-  const handleCurSymbolChange = (key) => {
-    props.setSignal(key);
-  }
   return (
     <Navbar collapseOnSelect expand="lg" className="py-3">
       <Container className="justify-content-between">
@@ -27,17 +24,16 @@ export default function Menu(props) {
                 id="dropdown-basic"
                 className=" fs-5-2 fw-semibold text-primary-1 secondary-btn"
               >
-                {SIGNAL_DATA[props.signal].TITLE}
+                Binance Signals
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {
                   Object.keys(SIGNAL_DATA).map((key) => {
                     return(
                       <Dropdown.Item
-                        key={{key}}
-                        onClick={() => {
-                          handleCurSymbolChange(key);
-                        }}
+                        href={SIGNAL_DATA[key].LINK}
+                        key={SIGNAL_DATA[key].VALUE}
+                        className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
                       >
                         {SIGNAL_DATA[key].TITLE}
                       </Dropdown.Item>
@@ -57,9 +53,8 @@ export default function Menu(props) {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => {
-                    props.setTrade(true);
-                  }}
+                  href={'/signals/binance-bot'}
+                  className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
                 >
                   Futures BOT
                 </Dropdown.Item>

@@ -32,38 +32,47 @@ export const MEMBERSHIP_PLAN =
 export const SIGNAL_DATA = {
   GETALL: {
     TITLE: "All Spot Signals",
-    VALUE: 0
+    VALUE: 0,
+    LINK: '/signals/all-spot-signals'
   },
   BTC: {
     TITLE: "BTC Spot Signals",
-    VALUE: 1
+    VALUE: 1,
+    LINK: '/signals/btc-spot-signals'
   },
   USDT: {
     TITLE: "USDT Spot Signals", 
-    VALUE: 2
+    VALUE: 2,
+    LINK: '/signals/usdt-spot-signals'
   },
   BUSDT: {
     TITLE: "BUSD Spot Signals",
-    VALUE: 3
+    VALUE: 3,
+    LINK: '/signals/busd-spot-signals'
   },
   ALL_USDT: {
     TITLE: "All Markets Signals",
-    VALUE: 4
+    VALUE: 4,
+    LINK: '/signals/all-markets-signals'
   },
   KUCOIN_USDT: {
     TITLE: "Kucoin Signals",
-    VALUE: 5
+    VALUE: 5,
+    LINK: '/signals/all-kucoin-signals'
   },
   BITFIX_USDT: {
     TITLE: "Bitfinex Signals",
-    VALUE: 6
+    VALUE: 6,
+    LINK: '/signals/bitfinex-signals'
   },
   FIX_SIGNAL: {
     TITLE: "FTX Signals",
-    VALUE: 7
+    VALUE: 7,
+    LINK: '/signals/fix-signals'
   },
   BINANCE_FUTURE: {
     TITLE: "Binance Futures",
-    VALUE: 8
+    VALUE: 8,
+    LINK: '/signals/binance-futures'
   }
 }

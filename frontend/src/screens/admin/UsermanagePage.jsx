@@ -25,7 +25,7 @@ import axios from "axios";
 import { SERVER_URL } from "../../config";
 import "react-image-upload/dist/index.css";
 import { Navigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Table from 'react-bootstrap/Table';
 import { FaUserAlt, FaSignOutAlt, FaPlus, FaUserEdit } from "react-icons/fa";
 
@@ -219,11 +219,10 @@ export default function UsermanagePage() {
     return <Navigate to="/login" />;
   }
   if (user.role != "ADMIN") {
-    return <Navigate to="/" />;
+    return <Navigate to="/signals/all-spot-signals" />;
   }
   return (
     <>
-    <ToastContainer />
       <Container className="pt-5, mt-5">
           <Button variant="primary" className="mx-2 px-5" onClick={() => {
             handleShow("0", "create")

@@ -10,13 +10,13 @@ export const AuthProvider = ({ children }) => {
   const login = async (data, update) => {
     setUser(data);
     if(!update) {
-      navigate("/");
+      navigate("/signals/all-spot-signals");
     }
   };
 
   const logout = () => {
     setUser(null);
-    navigate("/", { replace: true });
+    navigate("/login", { replace: true });
   };
 
   const value = useMemo(

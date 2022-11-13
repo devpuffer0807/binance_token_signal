@@ -72,61 +72,49 @@ export default function Header() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item>
-                    <Link
-                      to="/profile"
-                      className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
+                  <Dropdown.Item
+                    href="/profile"
+                    className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
                     >
                       <FaUserAlt className="me-2" />
                       Profile
-                    </Link>
                   </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Link
-                      to="/membership"
-                      className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
+                  <Dropdown.Item
+                    href="/membership"
+                    className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
                     >
                       <FaMoneyCheckAlt className="me-2" />
                       Membership
-                    </Link>
                   </Dropdown.Item>
 
                   
                   {user.role == "ADMIN" && (
                     <div>
-                      <Dropdown.Item>
-                        <Link
-                          to="/admin/usermanage"
-                          className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
+                      <Dropdown.Item
+                        href="/admin/usermanage"
+                        className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
                         >
                           <FaUserEdit className="me-2" />
                           User Manage
-                        </Link>
                       </Dropdown.Item>
-                      <Dropdown.Item>
-                      <Link
-                        to="/admin/membershipmanage"
+                      <Dropdown.Item
+                        href="/admin/membershipmanage"
                         className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
-                      >
-                        <FaRegIdCard className="me-2" />
-                        Membership Manage
-                      </Link>
-                    </Dropdown.Item>
-                  </div>
+                        >
+                          <FaRegIdCard className="me-2" />
+                          Membership Manage
+                      </Dropdown.Item>
+                    </div>
                   )}
 
                   <Dropdown.Item
+                    className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
                     onClick={() => {
                       auth.logout();
                     }}
-                  >
-                    <Link
-                      to="/"
-                      className="nav-link text-primary-1 fs-6 fw-semibold px-4 mx-3"
                     >
                       <FaSignOutAlt className="me-2" />
                       Log out
-                    </Link>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

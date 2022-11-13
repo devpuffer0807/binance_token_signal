@@ -7,7 +7,7 @@ import {
   Button,
   Spinner,
 } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { SERVER_URL } from "../../config";
@@ -29,9 +29,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   const { user } = useAuth();
-  if (user) {
-    return <Navigate to="/" />;
-  }
+  
 
   const Register = () => {
     setIsLoding(true);
@@ -252,7 +250,6 @@ export default function RegisterPage() {
           {/* <Image src="/assets/images/logo.svg" /> */}
         </Col>
       </Row>
-      <ToastContainer />
     </div>
   );
 }

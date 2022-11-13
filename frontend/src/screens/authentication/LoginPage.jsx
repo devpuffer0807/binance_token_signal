@@ -7,7 +7,7 @@ import {
   Button,
   Spinner,
 } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
 import { SERVER_URL } from "../../config";
@@ -175,26 +175,12 @@ export default function LoginPage() {
                   )}
                 </Col>
               </Row>
-              {/* <div className="fs-6 text-center text-white mb-4">
-                or Login with
-              </div> */}
-              {/* <Row className="justify-content-center mb-5">
-                <Button className="bg-white border border-0 mx-3 col-2 d-flex align-items-center justify-content-center p-2 secondary-btn">
-                  <Image src="/assets/images/go.svg" width="50" />
-                </Button>
-                <Button className="bg-white border border-0 mx-3 col-2 d-flex align-items-center justify-content-center p-2 secondary-btn">
-                  <Image src="/assets/images/fc.svg" width="50" />
-                </Button>
-              </Row> */}
               <div className="fs-6 text-center text-white mt-5">
                 By signing in or creating an account, you agree with your{" "}
                 <div className="d-flex align-items-center justify-content-center">
                   <Link to="/forgot" className="nav-link text-white fw-bold px-2">
                     Forgot Password
                   </Link>
-                  {/* <Link to="/" className="nav-link text-white fw-bold px-2">
-                    Privacy Statement
-                  </Link> */}
                 </div>
               </div>
             </Form>
@@ -214,7 +200,6 @@ export default function LoginPage() {
           {/* <Image src="/assets/images/logo.svg" /> */}
         </Col>
       </Row>
-      <ToastContainer />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Col, Container, Row, Form, Button, Spinner } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../config/AuthProvider";
 import { resetPasswordAPI } from "../../api/authentication";
@@ -168,7 +168,6 @@ export default function VerifyPage() {
           }}
         />
       </Row>
-      <ToastContainer />
     </div>
   );
 }

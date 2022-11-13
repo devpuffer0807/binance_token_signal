@@ -15,7 +15,7 @@ import axios from "axios";
 import { SERVER_URL, MEMBERSHIP_PLAN } from "../config";
 import "react-image-upload/dist/index.css";
 import { Navigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import WhitdrawImage from '../assets/images/whitdraw.png';
 import WalletImage from '../assets/images/wallet.jpg';
 import Transfercode from '../assets/images/transfercode.png';
@@ -165,7 +165,6 @@ export default function MembershipPage() {
 
   return (
     <>
-    <ToastContainer />
       {
         page != 0 && (
           <div className="container py-5">
