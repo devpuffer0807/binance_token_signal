@@ -18,7 +18,7 @@ import mySound from '../assets/Alarm07.wav';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { SERVER_URL,SIGNAL_DATA } from '../config/index';
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { FaLongArrowAltUp, FaLongArrowAltDown } from 'react-icons/fa';
 
 let signalForRequest = "GETALL";
@@ -240,7 +240,6 @@ export default function HomePage() {
   }
   return (
     <div className="HomePage">
-      <ToastContainer />
       <Menu setSignal={setSignal} signal={signal} setTrade={setTrade}/>
       <Container>
       {

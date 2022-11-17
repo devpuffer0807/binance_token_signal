@@ -69,6 +69,7 @@ export default function FutureSignalComponent(props) {
           setKeystatus(res.data.message + 'Total Futures Wallet Balance = ' + res.data.data.Balance);
         }
         else {
+          console.log(res.data);
           setKeystatus(res.data.message )
         }
       })
